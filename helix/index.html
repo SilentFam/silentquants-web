@@ -187,11 +187,12 @@
   .rnote{margin-top:6px;font-size:11.5px;color:var(--muted);line-height:1.6}
   .srcnote2{margin-top:10px;font-size:11.5px;color:var(--muted);line-height:1.6}
   .sitefoot{border-top:1px solid var(--line);background:var(--panel);margin-top:40px}
-  .sitefoot .in{max-width:900px;margin:0 auto;padding:30px 22px 22px;display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:18px 44px;text-align:center}
-  .sitefoot .fabout{flex:1 1 100%;text-align:center;display:flex;flex-direction:column;align-items:center}
-  .sitefoot .fabout p{margin-left:auto;margin-right:auto}
-  .sitefoot .fcol{text-align:center;min-width:120px}
-  .sitefoot .fcol a{text-align:center}
+  .sitefoot .in{max-width:860px;margin:0 auto;padding:30px 22px 24px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px 30px;text-align:left}
+  .sitefoot .fabout{grid-column:1/-1;text-align:center}
+  .sitefoot .fabout b{display:block;margin-bottom:8px}
+  .sitefoot .fabout p{margin:0 auto;max-width:64ch;text-align:left}
+  .sitefoot .fabout p.dim{text-align:center;max-width:80ch;margin-top:10px}
+  .sitefoot .fcol{text-align:left}
   .sitefoot .fabout b{font-size:15px;letter-spacing:-.02em}
   .sitefoot p{color:var(--muted);font-size:12px;line-height:1.7;margin:6px 0 0;max-width:52ch}
   .sitefoot .fcol h4{margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted)}
