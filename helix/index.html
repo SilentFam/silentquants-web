@@ -680,10 +680,10 @@
     <span class="navitem">
       <a href="#challenges" data-page="challenges">챌린지 <span class="cv">▾</span></a>
       <div class="dropdown" id="chMenu">
-        <a href="#challenges" data-all="1"><b>전체 챌린지</b><span id="cmAll">—</span></a>
-        <a href="#firms"><b>프랍펌</b><span id="cmFirms">—</span></a>
-        <a href="#discover"><b>둘러보기</b><span>→</span></a>
-        <a href="#compare" data-cmp="1"><b>비교</b><span>⇄</span></a>
+        <a href="#challenges" data-all="1" data-ko="전체 챌린지" data-en="All challenges"><b>전체 챌린지</b><span id="cmAll">—</span></a>
+        <a href="#firms" data-ko="프랍펌" data-en="Firms"><b>프랍펌</b><span id="cmFirms">—</span></a>
+        <a href="#discover" data-ko="둘러보기" data-en="Discover"><b>둘러보기</b><span>→</span></a>
+        <a href="#compare" data-cmp="1" data-ko="비교" data-en="Compare"><b>비교</b><span>⇄</span></a>
       </div>
     </span>
     <span class="navitem">
@@ -966,8 +966,24 @@ const KO2EN={"수시":"on-demand","없음":"none","매월":"monthly","격주":"b
  "무제한":"uncapped","조건":"conditional","조건부":"conditional","가능":"allowed","불가":"not allowed",
  "미확인":"unknown","없음(무제한)":"uncapped"};
 const hasHangul=v=>/[\uAC00-\uD7A3]/.test(String(v||""));
-const tx=v=>{ if(v==null||v==="")return v; if(lang!=="en")return v;
-  const k=String(v).trim(); return KO2EN[k]||k; };
+const KO2EN_WORDS=[[/영업일/g,"business days"],[/거래일/g,"trading days"],[/개월/g,"months"],[/주일/g,"weeks"],
+  [/격주/g,"bi-weekly"],[/매주/g,"weekly"],[/주간/g,"weekly"],[/매월/g,"monthly"],[/월간/g,"monthly"],
+  [/매일/g,"daily"],[/즉시/g,"instant"],[/수시/g,"on demand"],[/이후/g,"after"],[/첫\s*지급/g,"first payout"],
+  [/지급/g,"payout"],[/무제한/g,"uncapped"],[/미확인/g,"unknown"],[/없음/g,"none"],[/조건부/g,"conditional"],[/조건/g,"conditional"]];
+/* 영문 모드에서 데이터에 남은 한글을 영어로 바꾼다. 정확히 일치하는 표가 먼저, 그다음 단위·단어 패턴. */
+const tx=v=>{
+  if(v==null||v==="")return v;
+  if(lang!=="en")return v;
+  const k=String(v).trim();
+  if(KO2EN[k])return KO2EN[k];
+  if(!/[\uAC00-\uD7A3]/.test(k))return k;
+  let out=k;
+  KW2(out); // noop guard for lint
+  for(const [re,to] of KO2EN_WORDS) out=out.replace(re,to);
+  out=out.replace(/(\d+)\s*(business days|trading days|months|weeks|days)/g,"$1 $2");
+  return out.replace(/\s+/g," ").trim();
+};
+function KW2(){}
 const enumv=v=>{if(v==null||v==="")return v;const m={ko:{instant:"즉시","1-step":"1단계","2-step":"2단계","3-step":"3단계","1":"1단계","2":"2단계","3":"3단계",yes:"예",no:"아니오"},en:{"1":"1-step","2":"2-step","3":"3-step",yes:"yes",no:"no"}}[lang]||{};return m[v]||v;};
 const pc=v=>(v==null||v===""||num(v)===0)?'<span class="dim">—</span>':`<span class="mono">${esc(v)}%</span>`;
 function unitCell(numVal, txt){
@@ -1011,8 +1027,9 @@ function payTokens(raw){
   }
   return out.filter(x=>x!=="0일").slice(0,3);
 }
-function payCell(raw){
-  if(!raw) return '<span class="dim">—</span>';
+function payCell(rawIn){
+  if(!rawIn) return '<span class="dim">—</span>';
+  const raw=tx(rawIn);
   const tk=payTokens(raw);
   const full=String(raw).replace(/\s+/g," ").slice(0,180);
   if(!tk.length) return `<span class="payshort" title="${esc(full)}">${esc(String(raw).slice(0,14))}</span>`;
@@ -2263,12 +2280,18 @@ const FAQ={
          en:[["Where do the promo codes come from?","Only from the firm's own page. We do not republish another comparison site's partner codes."],
          ["Why is a code missing?","Because we have not confirmed a public promotion for that firm yet. We do not fill it with an estimate."],
          ["How fresh are the discounts?","As of the date we checked the firm's page, recorded per row. Confirm at the firm's checkout before paying."]]},
- challenges:{ko:[["상품이 693개인데 왜 업체는 29개인가요?","한 업체가 여러 상품(계좌 규모 × 프로그램)을 운영하기 때문입니다. 한 행이 하나의 상품입니다."],
+ challenges:{ko:[["상품이 2,166개인데 왜 업체는 71개인가요?","한 업체가 여러 상품(계좌 규모 × 프로그램)을 운영하기 때문입니다. 한 행이 하나의 상품입니다."],
              ["왜 어떤 상품은 금액이 비어 있나요?","해당 값을 아직 기록하지 못한 경우입니다. 0으로 채우지 않습니다."],
-             ["비교는 어떻게 하나요?","행을 클릭해 상세를 열고, 카드의 ‘비교에 추가’로 담은 뒤 하단 Compare에서 2~5개를 나란히 볼 수 있습니다."]],
-             en:[["693 products but only 29 brands?","One brand runs many products (size × programme). Each row is a single product."],
+             ["등급 옆에 붙은 C는 무엇인가요?","그 값을 업체 공식 페이지에서 아직 확인하지 못했다는 뜻입니다. 3자 출처에서 옮긴 값에만 붙이며, 공식 확인 후 A로 올라갑니다."],
+             ["평점에 P가 사라졌는데요?","PropFirmMatch가 매긴 점수는 더 이상 표시하지 않습니다. 경쟁사가 매긴 평점은 우리 데이터가 아니기 때문입니다. Trustpilot·Sitejabber·Feefo처럼 우리가 직접 확인한 출처만 남겼습니다."],
+             ["비교는 어떻게 하나요?","행을 클릭해 상세를 열고, 카드의 ‘비교에 추가’로 담은 뒤 하단 Compare에서 2~5개를 나란히 볼 수 있습니다."],
+             ["얼마나 자주 갱신되나요?","주 단위로 바뀝니다. 페이지 상단에 빌드 날짜, 행마다 확인 날짜가 표시됩니다."]],
+             en:[["2,166 products but only 71 brands?","One brand runs many products (size × programme). Each row is a single product."],
              ["Why are some values blank?","Because that value has not been recorded yet. We never fill blanks with zero."],
-             ["How do I compare?","Open a row for details, add it to compare, then open Compare to see 2-5 side by side."]]},
+             ["What does the C next to a value mean?","It means we have not confirmed that value on the firm's own page yet. It only appears on values taken from a third-party source, and it becomes an A once we verify it at the source."],
+             ["Where did the PropFirmMatch ratings go?","We no longer display them. A competitor's score is not our evidence. What remains are the sources we read ourselves — Trustpilot, Sitejabber and Feefo."],
+             ["How do I compare?","Open a row for details, add it to compare, then open Compare to see 2-5 side by side."],
+             ["How often is it updated?","Weekly. The build date is on the page and every row carries the date it was last checked."]]},
  rules:{ko:[["규칙 집계는 어떤 기준인가요?","상품 단위 기록을 회사별로 묶어 허용/조건부/혼합/불가/미확인으로 판정합니다."],
         ["조건부와 혼합의 차이는?","조건부는 특정 조건에서만 허용된다는 기록이고, 혼합은 상품마다 기록이 서로 다른 경우입니다."],
         ["규칙은 자주 바뀌나요?","네. 프랍펌 규칙은 자주 바뀌므로 거래 전 반드시 공식 규정을 확인하세요."]],
