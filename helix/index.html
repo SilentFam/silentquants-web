@@ -1041,7 +1041,7 @@ function payCell(rawIn){
                     .replace(/(\d+)\s*일/,"$1 days")
                     .replace(/(\d+)\s*개월/,"$1 months");
   };
-  if(!tk.length) return `<span class="payshort" title="${esc(full)}">${esc(String(raw).slice(0,14))}</span>`;
+  if(!tk.length) return `<span class="payshort" title="${esc(full)}">${esc(lbl(String(raw)).slice(0,14))}</span>`;
   return `<span class="payshort" title="${esc(full)}">${tk.map(x=>`<span class="ptk">${esc(lbl(x))}</span>`).join('<span class="psep">·</span>')}</span>`;
 }
 function stageTag(r){
