@@ -2252,7 +2252,18 @@ function applyStatics(){
 /* 테마 토글 없음 — helix는 항상 다크 */
 document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{
   lang=b.dataset.lang;localStorage.setItem("helix-lang",lang);
-  applyStatics();render();if(activeId)openDrawer(activeId);route();});
+  /* 동적 화면은 다시 그려야 언어가 바뀐다 — 표 설정, 필터, 현재 페이지 전부 */
+  applyStatics();
+  if(typeof buildTableSettings==="function") buildTableSettings();
+  if(typeof buildFilterSettings==="function") buildFilterSettings();
+  render();
+  route();
+  const _p=(location.hash.replace(/^#/,"").split(/[?/]/)[0]||"challenges");
+  if(_p==="brokers"&&typeof renderBrokers==="function") renderBrokers();
+  else if(_p==="firms"&&typeof renderFirms==="function") renderFirms();
+  else if(_p==="offers"&&typeof renderOffers==="function") renderOffers();
+  if(activeId) openDrawer(activeId);
+});
 el("gq").addEventListener("input",e=>{q=e.target.value.toLowerCase().trim();render();});
 document.querySelectorAll("thead th[data-sort]").forEach(th=>{
   th.tabIndex=0; th.setAttribute("aria-sort","none");
