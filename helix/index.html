@@ -822,8 +822,8 @@
 </div></div>
 
 
-<script>window.HELIX_VER="67e700bb";</script>
-<script src="data.js?v=67e700bb"></script>
+<script>window.HELIX_VER="18e33130";</script>
+<script src="data.js?v=18e33130"></script>
 <script>
 const DB = window.HELIX_DB;
 const rows = DB.rows;
@@ -1681,7 +1681,10 @@ function vsRowHtml(r,idx){
 }
 function leverCell(r){
   let v=r.lv||r.lvp;
-  if(!v) return '<span class="dim">—</span>';
+  if(!v){
+    const nf=LV_NOTE[r.f];
+    return nf ? `<span class="dim" title="${esc(nf)}">—</span>` : '<span class="dim">—</span>';
+  }
   /* '30' 처럼 숫자만 온 값도 1:30 으로 보여준다 */
   if(/^\d{1,4}$/.test(String(v).trim())) v="1:"+String(v).trim();
   let tip = r.lg==="C"
