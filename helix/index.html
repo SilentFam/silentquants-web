@@ -983,8 +983,9 @@ const tx=v=>{
   const k=String(v).trim();
   if(KO2EN[k])return KO2EN[k];
   if(!/[\uAC00-\uD7A3]/.test(k))return k;
-  let out=k;
-  KW2(out); // noop guard for lint
+  /* 토큰 단위 치환 — "FSA 세이셸" → "FSA Seychelles" 처럼 섞인 문자열을 살린다 */
+  let out=k.replace(/[\uAC00-\uD7A3]+|[A-Za-z0-9().\/\-:+,%]+/g, m=>KO2EN[m]||m);
+  KW2(out);
   for(const [re,to] of KO2EN_WORDS) out=out.replace(re,to);
   out=out.replace(/(\d+)\s*(business days|trading days|months|weeks|days)/g,"$1 $2");
   return out.replace(/\s+/g," ").trim();
