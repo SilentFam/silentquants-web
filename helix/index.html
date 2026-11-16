@@ -682,16 +682,16 @@
       <div class="dropdown" id="chMenu">
         <a href="#challenges" data-all="1" data-ko="전체 챌린지" data-en="All challenges"><b>전체 챌린지</b><span id="cmAll">—</span></a>
         <a href="#firms" data-ko="프랍펌" data-en="Firms"><b>프랍펌</b><span id="cmFirms">—</span></a>
-        <a href="#discover" data-ko="둘러보기" data-en="Discover"><b>둘러보기</b><span>→</span></a>
-        <a href="#compare" data-cmp="1" data-ko="비교" data-en="Compare"><b>비교</b><span>⇄</span></a>
+        <a href="#discover" data-ko="둘러보기" data-en="Discover"><b data-ko="둘러보기" data-en="Discover">둘러보기</b><span>→</span></a>
+        <a href="#compare" data-cmp="1" data-ko="비교" data-en="Compare"><b data-ko="비교" data-en="Compare">비교</b><span>⇄</span></a>
       </div>
     </span>
     <span class="navitem">
       <a href="#firms" data-page="firms" data-also="brokers" data-ko="프랍펌" data-en="Firms">프랍펌 ▾</a>
       <div class="dropdown" id="firmsMenu">
-        <a href="#firms"><b>프랍펌 전체</b><span id="fmFirms">—</span></a>
-        <a href="#rules"><b>프랍펌 규칙</b><span>§</span></a>
-        <a href="#spreads"><b>스프레드</b><span>→</span></a>
+        <a href="#firms"><b data-ko="프랍펌 전체" data-en="All firms">프랍펌 전체</b><span id="fmFirms">—</span></a>
+        <a href="#rules"><b data-ko="프랍펌 규칙" data-en="Firm rules">프랍펌 규칙</b><span>§</span></a>
+        <a href="#spreads"><b data-ko="스프레드" data-en="Spreads">스프레드</b><span>→</span></a>
       </div>
     </span>
     <a href="#brokers" data-page="brokers" data-ko="브로커" data-en="Brokers">브로커</a>
@@ -699,11 +699,11 @@
     <span class="navitem">
       <a href="#tools" data-page="tools" data-also="plan,payouts,compare,discover" data-ko="도구" data-en="Tools">도구 ▾</a>
       <div class="dropdown" id="toolsMenu">
-        <a href="#plan"><b>가족 플랜</b><span>→</span></a>
-        <a href="#payouts"><b>지급</b><span>→</span></a>
-        <a href="#compare"><b>비교</b><span>⇄</span></a>
-        <a href="#discover"><b>둘러보기</b><span>→</span></a>
-        <a href="#tools"><b>도구 전체</b><span>→</span></a>
+        <a href="#plan"><b data-ko="가족 플랜" data-en="Family plan">가족 플랜</b><span>→</span></a>
+        <a href="#payouts"><b data-ko="지급" data-en="Payouts">지급</b><span>→</span></a>
+        <a href="#compare"><b data-ko="비교" data-en="Compare">비교</b><span>⇄</span></a>
+        <a href="#discover"><b data-ko="둘러보기" data-en="Discover">둘러보기</b><span>→</span></a>
+        <a href="#tools"><b data-ko="도구 전체" data-en="All tools">도구 전체</b><span>→</span></a>
       </div>
     </span>
   </div>
@@ -962,6 +962,8 @@ const num=v=>{const n=Number(String(v).replace(/[,$%\s]/g,""));return isNaN(n)?n
 const ok=v=>v===true;
 const assetLabel=v=>(ASSET[lang]||ASSET.en)[v]||(v||"—").toUpperCase();
 const KO2EN={"수시":"on-demand","없음":"none","매월":"monthly","격주":"bi-weekly","2주":"2 weeks",
+ "은행 이체":"bank transfer","은행송금":"bank transfer","카드":"card","크립토":"crypto","기타":"other",
+ "전자지갑":"e-wallet","페이팔":"paypal","와이즈":"wise","즉시":"instant",
  "14일":"14 days","10일":"10 days","7일":"7 days","5일":"5 days","30일":"30 days","21일":"21 days",
  "무제한":"uncapped","조건":"conditional","조건부":"conditional","가능":"allowed","불가":"not allowed",
  "미확인":"unknown","없음(무제한)":"uncapped"};
@@ -1539,7 +1541,7 @@ function buildFilters(){
     ${po.map(v=>chk(v,F.plat.has(v),"plat",v,cnt[v])).join("")}</div></details>`);}
   {const pmOpts=[...new Set(rows.flatMap(r=>payMethods(r)))].sort();
    if(pmOpts.length) add("paym", `<details class="fgroup" data-g="paym" ${OPEN.paym?"open":""}><summary>${lang==="ko"?"지급 방식":"Payout method"}</summary><div class="body">
-    ${pmOpts.map(v=>chk(v,F.paym.has(v),"paym",v,rowCount(r=>payMethods(r).includes(v)))).join("")}</div></details>`);}
+    ${pmOpts.map(v=>chk(tx(v),F.paym.has(v),"paym",v,rowCount(r=>payMethods(r).includes(v)))).join("")}</div></details>`);}
   add("fee", `<details class="fgroup" data-g="fee" ${OPEN.fee?"open":""}><summary>${lang==="ko"?"결제 유형":"Payment"}</summary><div class="body"><div class="chips2">
     ${["free","normal","later"].map(k=>`<button data-fee="${k}" class="${F.fee.has(k)?"on":""}">${esc(fclassLabel(k))}</button>`).join("")}</div></div></details>`);
   add("target", `<details class="fgroup" data-g="target" ${OPEN.target?"open":""}><summary title="${esc((TIPS.split)[lang])}">${esc(t("fTarget"))}</summary><div class="body"><div class="chips2">
