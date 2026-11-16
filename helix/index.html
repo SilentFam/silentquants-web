@@ -1032,8 +1032,17 @@ function payCell(rawIn){
   const raw=tx(rawIn);
   const tk=payTokens(raw);
   const full=String(raw).replace(/\s+/g," ").slice(0,180);
+  /* payTokens는 내부 표준형을 한국어로 만든다. 영문 모드에서는 토큰을 영어로 되돌린다. */
+  const PT_EN={"수시":"on demand","매일":"daily","주간":"weekly","격주":"bi-weekly","월간":"monthly"};
+  const lbl=x=>{
+    if(lang!=="en") return x;
+    if(PT_EN[x]) return PT_EN[x];
+    return String(x).replace(/(\d+)\s*영업일/,"$1 business days")
+                    .replace(/(\d+)\s*일/,"$1 days")
+                    .replace(/(\d+)\s*개월/,"$1 months");
+  };
   if(!tk.length) return `<span class="payshort" title="${esc(full)}">${esc(String(raw).slice(0,14))}</span>`;
-  return `<span class="payshort" title="${esc(full)}">${tk.map(x=>`<span class="ptk">${esc(x)}</span>`).join('<span class="psep">·</span>')}</span>`;
+  return `<span class="payshort" title="${esc(full)}">${tk.map(x=>`<span class="ptk">${esc(lbl(x))}</span>`).join('<span class="psep">·</span>')}</span>`;
 }
 function stageTag(r){
   const n=Number(r.sg||0);
