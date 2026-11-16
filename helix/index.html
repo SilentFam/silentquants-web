@@ -532,7 +532,8 @@
   .selsort{background:var(--panel2);border:1px solid var(--line2);color:var(--ink2);border-radius:9px;
     font:inherit;font-size:12px;font-weight:600;padding:7px 10px;cursor:pointer}
   .tagpromo{display:inline-block;border-radius:5px;padding:1px 6px;font-size:9px;font-weight:800;letter-spacing:.05em;
-    background:rgba(231,70,148,.16);color:var(--pink);margin-left:6px;vertical-align:middle}
+    background:rgba(var(--accent-rgb),.16);color:var(--accent);margin-left:6px;vertical-align:middle;
+    border:1px solid rgba(var(--accent-rgb),.35)}
   .chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
   .chart .cap{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.55}
   /* firm page */
@@ -687,7 +688,7 @@
       </div>
     </span>
     <span class="navitem">
-      <a href="#firms" data-page="firms" data-also="brokers" data-ko="프랍펌" data-en="Firms">프랍펌 ▾</a>
+      <a href="#firms" data-page="firms" data-ko="프랍펌" data-en="Firms">프랍펌 ▾</a>
       <div class="dropdown" id="firmsMenu">
         <a href="#firms"><b data-ko="프랍펌 전체" data-en="All firms">프랍펌 전체</b><span id="fmFirms">—</span></a>
         <a href="#rules"><b data-ko="프랍펌 규칙" data-en="Firm rules">프랍펌 규칙</b><span>§</span></a>
@@ -962,13 +963,16 @@ const num=v=>{const n=Number(String(v).replace(/[,$%\s]/g,""));return isNaN(n)?n
 const ok=v=>v===true;
 const assetLabel=v=>(ASSET[lang]||ASSET.en)[v]||(v||"—").toUpperCase();
 const KO2EN={"수시":"on-demand","없음":"none","매월":"monthly","격주":"bi-weekly","2주":"2 weeks",
+ "매수력":"Buying power","세이셸":"Seychelles","영국":"UK","호주":"Australia","키프로스":"Cyprus","독일":"Germany","바하마":"Bahamas","케냐":"Kenya","남아프리카":"South Africa","모리셔스":"Mauritius","두바이":"Dubai","벨리즈":"Belize","바누아투":"Vanuatu","세인트빈센트":"St Vincent","아일랜드":"Ireland","미국":"US","스위스":"Switzerland","홍콩":"Hong Kong","싱가포르":"Singapore","일본":"Japan","한국":"Korea","리투아니아":"Lithuania","에스토니아":"Estonia","몰타":"Malta","말타":"Malta","조지아":"Georgia","아랍에미리트":"UAE","영령":"British","쿡제도":"Cook Islands","나우루":"Nauru","코모로":"Comoros","남아공":"South Africa","뉴질랜드":"New Zealand","캐나다":"Canada","프랑스":"France","스페인":"Spain","이탈리아":"Italy","네덜란드":"Netherlands","폴란드":"Poland","체코":"Czechia","헝가리":"Hungary","불가리아":"Bulgaria","루마니아":"Romania","인도":"India","인도네시아":"Indonesia","말레이시아":"Malaysia","태국":"Thailand","베트남":"Vietnam","필리핀":"Philippines","브라질":"Brazil","멕시코":"Mexico","아르헨티나":"Argentina","터키":"Turkey","이스라엘":"Israel",
  "은행 이체":"bank transfer","은행송금":"bank transfer","카드":"card","크립토":"crypto","기타":"other",
  "전자지갑":"e-wallet","페이팔":"paypal","와이즈":"wise","즉시":"instant",
  "14일":"14 days","10일":"10 days","7일":"7 days","5일":"5 days","30일":"30 days","21일":"21 days",
  "무제한":"uncapped","조건":"conditional","조건부":"conditional","가능":"allowed","불가":"not allowed",
  "미확인":"unknown","없음(무제한)":"uncapped"};
 const hasHangul=v=>/[\uAC00-\uD7A3]/.test(String(v||""));
-const KO2EN_WORDS=[[/영업일/g,"business days"],[/거래일/g,"trading days"],[/개월/g,"months"],[/주일/g,"weeks"],
+const KO2EN_WORDS=[[/1단계/g,"step 1"],[/2단계/g,"step 2"],[/3단계/g,"step 3"],[/4단계/g,"step 4"],
+  [/평가\s*단계/g,"evaluation"],[/펀딩\s*단계/g,"funded"],[/챌린지\s*단계/g,"challenge stage"],
+  [/영업일/g,"business days"],[/거래일/g,"trading days"],[/개월/g,"months"],[/주일/g,"weeks"],
   [/격주/g,"bi-weekly"],[/매주/g,"weekly"],[/주간/g,"weekly"],[/매월/g,"monthly"],[/월간/g,"monthly"],
   [/매일/g,"daily"],[/즉시/g,"instant"],[/수시/g,"on demand"],[/이후/g,"after"],[/첫\s*지급/g,"first payout"],
   [/지급/g,"payout"],[/무제한/g,"uncapped"],[/미확인/g,"unknown"],[/없음/g,"none"],[/조건부/g,"conditional"],[/조건/g,"conditional"]];
@@ -1687,6 +1691,7 @@ function leverCell(r){
   }
   /* '30' 처럼 숫자만 온 값도 1:30 으로 보여준다 */
   if(/^\d{1,4}$/.test(String(v).trim())) v="1:"+String(v).trim();
+  v=tx(v);
   let tip = r.lg==="C"
     ? (lang==="ko"?"3자 출처에서 옮긴 값 — 업체 공식 페이지 확인 전":"Third-party value — not yet verified on the firm's own page")
     : (lang==="ko"?"업체 공식 페이지에서 확인":"Read from the firm's own page");
@@ -1987,6 +1992,13 @@ function priceBasisBadge(firm){
   if(b==="list") return ` <span class="pbasis list" title="${lang==="ko"?"정가(list price) 기준입니다.":"Recorded at list price."}">${lang==="ko"?"정가":"list"}</span>`;
   return "";
 }
+function noteBlock(r){
+  const raw=r.no||"";
+  if(!raw) return "";
+  const label=lang==="ko"?"메모":"Note";
+  const hint=(lang==="en" && hasHangul(raw))?" <span class=\"dim\">(recorded in Korean)</span>":"";
+  return `<div class="kv"><div class="k">${label}${hint}</div><div class="v">${esc(raw)}</div></div>`;
+}
 function drawerRow(k,v){return `<div class="k">${esc(k)}</div><div>${v}</div>`;}
 function ruleChip(label,v){
   const cls=v===true?"ok":(v===false?"no":"un");
@@ -2110,7 +2122,7 @@ function openDrawer(id){
       ${drawerRow(t("cPfmRef"),(r.dp!=null||r.mp!=null)?`${esc(r.dp??"—")}% / ${esc(r.mp??"—")}%`:'<span class="dim">—</span>')}
     </div>
     <div class="sect">${esc(t("sectFloor"))}</div>${floorChart(r.dd==="Trailing"?"Trailing":"Static")}
-    <div class="sect">${esc(t("sectNotes"))}</div><div id="notesHost">${notesBlock(fullNote(r))}</div>
+    <div class="sect">${esc(t("sectNotes"))}${(lang==="en"&&hasHangul(fullNote(r)))?' <span class="dim" style="font-weight:400;letter-spacing:0">(recorded in Korean)</span>':""}</div><div id="notesHost">${notesBlock(fullNote(r))}</div>
     <div class="sect">${esc(t("sectEv"))}</div>${evidenceBlock(r)}
     <div class="sect">${esc(t("sectSrc"))}</div>
     <div class="kv">${drawerRow(t("cVer"),`<span class="pill p-${esc(r.vf||"C")}">${esc(r.vf||"—")}</span>`)}
@@ -2780,7 +2792,7 @@ function renderBrokers(){
   const chip=(on,label,attr)=>`<button class="gopt${on?" on":""}" ${attr}>${esc(label)}</button>`;
   const row=b=>`<tr>
     <td class="firm"><a href="${esc(b.url)}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;border-bottom:1px dotted var(--line2)">${esc(b.name)}</a></td>
-    <td class="breg">${b.reg&&b.reg.length?b.reg.slice(0,3).map(r=>`<span class="btag">${esc(r)}</span>`).join(""):'<span class="dim">—</span>'}${b.reg&&b.reg.length>3?`<span class="dim">+${b.reg.length-3}</span>`:""}</td>
+    <td class="breg">${b.reg&&b.reg.length?b.reg.slice(0,3).map(r=>`<span class="btag">${esc(tx(r))}</span>`).join(""):'<span class="dim">—</span>'}${b.reg&&b.reg.length>3?`<span class="dim">+${b.reg.length-3}</span>`:""}</td>
     <td class="num">${b.min!=null?money(b.min,b.cur||"USD"):'<span class="dim">—</span>'}</td>
     <td class="bplat">${b.plat&&b.plat.length?b.plat.map(x=>`<span class="btag">${esc(x)}</span>`).join(""):'<span class="dim">—</span>'}</td>
     <td class="num">${b.spread!=null?`<span class="mono">${b.spread}</span>`:'<span class="dim">—</span>'}</td>
@@ -2799,7 +2811,7 @@ function renderBrokers(){
       <div class="grow" style="grid-template-columns:70px 1fr"><div class="glabel">${T("플랫폼","Platform")}</div><div class="gopts">
         ${allPlat.map(k=>chip(BK.plat.has(k), k.toUpperCase(), `data-bplat="${k}"`)).join("")}</div></div>
       <div class="grow" style="grid-template-columns:70px 1fr"><div class="glabel">${T("규제","Regulator")}</div><div class="gopts">
-        ${allReg.slice(0,8).map(k=>chip(BK.reg.has(k), k, `data-breg="${esc(k)}"`)).join("")}</div></div>
+        ${allReg.slice(0,8).map(k=>chip(BK.reg.has(k), tx(k), `data-breg="${esc(k)}"`)).join("")}</div></div>
       <div class="grow" style="grid-template-columns:70px 1fr"><div class="glabel">${T("조건","Filters")}</div><div class="gopts">
         ${chip(BK.nbp, T("NBP 보호만","NBP only"), 'data-bnbp="1"')}
         ${[null,0,50,200].map(v=>chip(BK.maxDep===v, v==null?T("입금 전체","any deposit"):`≤ $${v}`, `data-bdep="${v==null?"":v}"`)).join("")}</div></div>
@@ -4049,7 +4061,7 @@ function brokersForPlatforms(plats){
 }
 function brokerRow(b){
   return `<div class="brow"><a href="${esc(b.url)}" target="_blank" rel="noopener">${esc(b.name)}</a>
-    <span class="bmeta">${b.min!=null?money(b.min,b.cur||"USD"):"—"} · ${b.spread!=null?b.spread+"핍":"—"} · ${esc((b.reg||[])[0]||"—")}</span></div>`;
+    <span class="bmeta">${b.min!=null?money(b.min,b.cur||"USD"):"—"} · ${b.spread!=null?(lang==="ko"?b.spread+"핍":b.spread+" pips"):"—"} · ${esc(tx((b.reg||[])[0]||"—"))}</span></div>`;
 }
 function groupPanel(r){
   const T=(ko,en)=>lang==="ko"?ko:en;
