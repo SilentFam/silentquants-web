@@ -3136,8 +3136,11 @@ function renderDocs(){
     ["ea_eval / news_eval / on_eval / cp_eval","단계별 규칙 허용 여부"],
     ["review_status","미검토·검토됨·3자 출처"],["verified","등급 A/B/C"]];
   el("docsMain").innerHTML=`
-    <div class="hero2"><h1>${lang==="ko"?"HELIX 문서":"HELIX Docs"}</h1>
-      <p>${lang==="ko"?"데이터가 어떻게 구성되어 있고, 각 값이 무엇을 뜻하며, 어떻게 인용하는지 정리했습니다.":"How the data is structured, what each value means, and how to cite it."}</p></div>
+    <div class="hero2"><h1>${lang==="ko"?"Helix 문서":"Helix docs"}</h1>
+      <p>${lang==="ko"?"데이터가 어떻게 구성되어 있고, 각 값이 무엇을 뜻하며, 어떻게 인용하는지 정리했습니다.":"How the data is structured, what each value means, and how to cite it."}</p>
+      <p class="note">${lang==="ko"
+        ? "이 데이터베이스는 팔지 않습니다. 유료 벽도, 광고 순위도 없습니다. 매주 다시 확인하는 시간이 실제 비용이고, 그 비용을 어떻게 쓰는지는 <a href=\"https://silentquants.com/ko/support/\" target=\"_blank\" rel=\"noopener\">후원 페이지</a>에 적어두었습니다. 틀린 값은 <a href=\"mailto:hello@silentfam.com?subject=Helix%20error%20report\">메일</a>로 알려주시면 고칩니다."
+        : "This database is not for sale. No paywall, no paid ranking. The real cost is the hours spent re-checking rows, and where that money would go is written on the <a href=\"https://silentquants.com/support/\" target=\"_blank\" rel=\"noopener\">support page</a>. If a value is wrong, <a href=\"mailto:hello@silentfam.com?subject=Helix%20error%20report\">tell us</a> and we will fix it."}</p></div>
 
     <div class="panel"><h3>${lang==="ko"?"1. 빠른 시작":"1. Quickstart"}</h3>
       <div class="empty-inline">${lang==="ko"
@@ -3550,6 +3553,8 @@ function renderSiteFoot(){
     ${col(T("도구","Tools"),[["goal",T("목표로 찾기","Goal finder")],["plan",T("가족 플랜","Family plan")],["compare",T("비교","Compare")],["spreads",T("스프레드","Spreads")],["payouts",T("지급","Payouts")]])}
     ${col(T("정보","About"),[["method",T("방법론·필드","Method")],["docs",T("문서","Docs")],["sitemap",T("사이트맵","Site map")]])}
     <div class="fcol"><h4>SilentFam</h4>
+      <a href="https://silentquants.com/support/" target="_blank" rel="noopener">${T("후원·비용 공개","Support")} ↗</a>
+      <a href="mailto:hello@silentfam.com?subject=Helix%20error%20report">${T("오류 신고","Report an error")}</a>
       <a href="https://silentquants.com/" target="_blank" rel="noopener">SilentQuants ↗</a>
       <a href="https://silentfam.com/" target="_blank" rel="noopener">SilentFam ↗</a>
     </div>
