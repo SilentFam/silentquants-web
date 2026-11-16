@@ -824,8 +824,8 @@
 </div></div>
 
 
-<script>window.HELIX_VER="67c1ba88";</script>
-<script src="data.js?v=67c1ba88"></script>
+<script>window.HELIX_VER="e28b8856";</script>
+<script src="data.js?v=e28b8856"></script>
 <script>
 const DB = window.HELIX_DB;
 const rows = DB.rows;
@@ -1268,7 +1268,11 @@ function ensureNotes(cb){
   _notesReq.then(()=>cb&&cb());
 }
 function fullNote(r){ return (window.HELIX_NOTES && window.HELIX_NOTES[r.i]) || r.no || ""; }
+const NOTES_EN=(typeof DB!=="undefined"&&DB.noen)||{};
+/* 메모 원문이 영어 번역을 가지고 있으면 그것을 쓴다. 없으면 한국어 원문 + 표시. */
+function noteText(t){ if(lang!=="en"||!t) return t; return NOTES_EN[t] || t; }
 function notesBlock(txt){
+  txt = noteText(txt);
   if(txt && lang==="en" && hasHangul(txt)) txt="[Korean original] "+txt;
   if(!txt) return `<div class="notewrap"><div class="notelist"><li>${esc(t("noNotes"))}</li></div></div>`;
   let parts = txt.split(/\s*\|\s*/).map(s=>s.trim()).filter(Boolean);
@@ -2124,7 +2128,7 @@ function openDrawer(id){
       ${drawerRow(t("cPfmRef"),(r.dp!=null||r.mp!=null)?`${esc(r.dp??"—")}% / ${esc(r.mp??"—")}%`:'<span class="dim">—</span>')}
     </div>
     <div class="sect">${esc(t("sectFloor"))}</div>${floorChart(r.dd==="Trailing"?"Trailing":"Static")}
-    <div class="sect">${esc(t("sectNotes"))}${(lang==="en"&&hasHangul(fullNote(r)))?' <span class="dim" style="font-weight:400;letter-spacing:0">(recorded in Korean)</span>':""}</div><div id="notesHost">${notesBlock(fullNote(r))}</div>
+    <div class="sect">${esc(t("sectNotes"))}${(lang==="en"&&hasHangul(noteText(fullNote(r))))?' <span class="dim" style="font-weight:400;letter-spacing:0">(recorded in Korean)</span>':""}</div><div id="notesHost">${notesBlock(fullNote(r))}</div>
     <div class="sect">${esc(t("sectEv"))}</div>${evidenceBlock(r)}
     <div class="sect">${esc(t("sectSrc"))}</div>
     <div class="kv">${drawerRow(t("cVer"),`<span class="pill p-${esc(r.vf||"C")}">${esc(r.vf||"—")}</span>`)}
