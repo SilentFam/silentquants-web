@@ -1680,11 +1680,14 @@ function vsRowHtml(r,idx){
       <td class="num">${leverCell(r)}</td></tr>`;
 }
 function leverCell(r){
-  const v=r.lv||r.lvp;
+  let v=r.lv||r.lvp;
   if(!v) return '<span class="dim">—</span>';
-  const tip = r.lg==="C"
-    ? (lang==="ko"?"3자 출처(PFM)에서 옮긴 값 — 업체 공식 페이지 확인 전":"Third-party value (PFM) — not yet verified on the firm's own page")
+  /* '30' 처럼 숫자만 온 값도 1:30 으로 보여준다 */
+  if(/^\d{1,4}$/.test(String(v).trim())) v="1:"+String(v).trim();
+  let tip = r.lg==="C"
+    ? (lang==="ko"?"3자 출처에서 옮긴 값 — 업체 공식 페이지 확인 전":"Third-party value — not yet verified on the firm's own page")
     : (lang==="ko"?"업체 공식 페이지에서 확인":"Read from the firm's own page");
+  if(r.lg==="A" && r.ls){ try{ tip += " · " + new URL(r.ls).hostname.replace(/^www\./,""); }catch(e){} }
   return `<span title="${esc(tip)}">${esc(v)}${r.lg==="C"?'<sup class="gC">C</sup>':""}</span>`;
 }
 function vsMetrics(){
