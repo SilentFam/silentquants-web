@@ -2086,6 +2086,7 @@ function openDrawer(id){
     ` · <span class="dim">${esc(t("grade"))} ${esc(r.vf||"—")} ${esc(gradeWord(r.vf))}</span>`+
     (pl?` · <a href="${esc(pl)}" target="_blank" rel="noopener">PFM ↗</a>`:"");
   const kDays=(r.mf!=null?r.mf:r.md);
+  const tp=(DB.tpwarn||{})[r.f];
   el("dBody").innerHTML=`
     <div class="kpis">
       <div class="kpi"><div class="v g">${r.tg?esc(r.tg)+"%":'<span class="dim">—</span>'}</div><div class="k">${esc(t("kTarget"))}</div></div>
