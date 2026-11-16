@@ -318,6 +318,8 @@
     box-shadow:inset 0 0 0 1px rgba(0,0,0,.35), 0 0 22px rgba(53,196,174,.10)}
   .navpill a{font-size:12.5px;font-weight:600;color:var(--ink2);text-decoration:none;
     padding:6px 13px;border-radius:9999px;white-space:nowrap;transition:.15s}
+  .backhome{color:var(--muted);text-decoration:none;font-size:16px;margin-right:6px;border:0;line-height:1}
+  .backhome:hover{color:var(--accent)}
   .navpill a:hover{color:var(--accent);background:rgba(53,196,174,.14)}
   .fgroup[draggable="true"]{cursor:grab}
   .fgroup.dragging{opacity:.5}
@@ -671,6 +673,7 @@
 <a class="skip" id="skipLink" href="#main">본문으로 건너뛰기 · Skip to content</a>
 <a class="skip" id="skipTable" href="#tableView">표 데이터로 건너뛰기 · Skip to the table</a>
 <div class="top"><div class="in">
+  <a href="https://silentquants.com/" class="backhome" title="SilentQuants로 돌아가기" aria-label="SilentQuants로 돌아가기">←</a>
   <a href="#home" class="brand" style="text-decoration:none;color:inherit"><svg class="mark" viewBox="0 0 26 26" fill="none" aria-hidden="true">
       <path d="M13 3.2c-4.9 0-8.6 3.2-8.6 7.4 0 4.2 3.7 7.2 8.6 7.2 4.4 0 7.6-2.4 8.2-5.7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
       <path d="M16.6 21.4c3-.5 5.3-2.4 6.2-5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" opacity=".5"/>
@@ -824,8 +827,8 @@
 </div></div>
 
 
-<script>window.HELIX_VER="e28b8856";</script>
-<script src="data.js?v=e28b8856"></script>
+<script>window.HELIX_VER="67c1ba88";</script>
+<script src="data.js?v=67c1ba88"></script>
 <script>
 const DB = window.HELIX_DB;
 const rows = DB.rows;
@@ -1268,9 +1271,24 @@ function ensureNotes(cb){
   _notesReq.then(()=>cb&&cb());
 }
 function fullNote(r){ return (window.HELIX_NOTES && window.HELIX_NOTES[r.i]) || r.no || ""; }
-const NOTES_EN=(typeof DB!=="undefined"&&DB.noen)||{};
-/* 메모 원문이 영어 번역을 가지고 있으면 그것을 쓴다. 없으면 한국어 원문 + 표시. */
-function noteText(t){ if(lang!=="en"||!t) return t; return NOTES_EN[t] || t; }
+/* 메모 번역은 300KB라서 필요할 때 따로 받는다 (영문 모드에서 드로어를 열 때). */
+let NOTES_EN=null, NE_LOADING=false, NE_WAIT=[];
+function ensureNotesEn(cb){
+  if(NOTES_EN){ if(cb) cb(); return; }
+  if(cb) NE_WAIT.push(cb);
+  if(NE_LOADING) return;
+  NE_LOADING=true;
+  const sc=document.createElement("script");
+  sc.src="notes_en.js?v="+(window.HELIX_VER||"1");
+  sc.onload=()=>{ NOTES_EN=window.HELIX_NOTES_EN||{}; const q=NE_WAIT; NE_WAIT=[]; q.forEach(f=>{try{f()}catch(e){}}); };
+  sc.onerror=()=>{ NOTES_EN={}; NE_LOADING=false; };
+  document.head.appendChild(sc);
+}
+function noteText(t){
+  if(lang!=="en"||!t) return t;
+  if(!NOTES_EN){ ensureNotesEn(()=>{ if(activeId) openDrawer(activeId); }); return t; }
+  return NOTES_EN[t] || t;
+}
 function notesBlock(txt){
   txt = noteText(txt);
   if(txt && lang==="en" && hasHangul(txt)) txt="[Korean original] "+txt;
@@ -2260,6 +2278,7 @@ document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{
   lang=b.dataset.lang;localStorage.setItem("helix-lang",lang);
   /* 동적 화면은 다시 그려야 언어가 바뀐다 — 표 설정, 필터, 현재 페이지 전부 */
   applyStatics();
+  if(lang==="en") ensureNotesEn(()=>{ if(activeId) openDrawer(activeId); });
   if(typeof buildTableSettings==="function") buildTableSettings();
   if(typeof buildFilterSettings==="function") buildFilterSettings();
   render();
