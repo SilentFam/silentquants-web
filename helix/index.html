@@ -17,7 +17,7 @@
   html[data-theme="dark"]{
     --bg:#03080a;--panel:#050b0d;--panel2:#0b1215;--line:#1d2529;--line2:#2b3539;
     --ink:#fcfcfe;--ink2:#d2d4d6;--muted:#9ba0a5;
-    --accent:#35c4ae;
+    --accent:#35c4ae; --accent-rgb:53,196,174;
     --pink:#35c4ae;--cyan:#35c4ae;--purple:#35c4ae;--blue:#35c4ae;
     --green:#34dfaa;--amber:#ffab00;--red:#ff2d55;
     --on-accent:#12091f;
@@ -26,7 +26,7 @@
   html[data-theme="light"]{
     --bg:#fff;--panel:#fff;--panel2:#f7f6f9;--line:#e7e5ea;--line2:#d5d2da;
     --ink:#0b0f10;--ink2:#3a3f42;--muted:#6d7276;
-    --accent:#6d3ff0;
+    --accent:#6d3ff0; --accent-rgb:109,63,240;
     --pink:#6d3ff0;--cyan:#6d3ff0;--purple:#6d3ff0;--blue:#6d3ff0;
     --green:#06744e;--amber:#8a5f00;--red:#c8392c;--shadow:0 18px 40px rgba(11,15,16,.12);
     --on-accent:#fff;
@@ -824,8 +824,8 @@
 </div></div>
 
 
-<script>window.HELIX_VER="7e125c93";</script>
-<script src="data.js?v=7e125c93"></script>
+<script>window.HELIX_VER="67c1ba88";</script>
+<script src="data.js?v=67c1ba88"></script>
 <script>
 const DB = window.HELIX_DB;
 const rows = DB.rows;
@@ -2843,7 +2843,7 @@ function renderBrokers(){
       <div class="meta">2. ${T("NBP(네거티브 밸런스 보호) — 위 표에서 ✓가 있는 브로커를 우선하세요.","Negative balance protection — prefer a broker marked ✓ above.")}</div>
       <div class="meta">3. ${T("규제 기관 — 1개국 규제보다 다국가 규제가 일반적으로 안전합니다.","Regulators — multi-jurisdiction regulation is generally stronger than a single offshore licence.")}</div></div>
     <div class="panel" style="margin-top:14px"><h3>${T("아직 확인하지 못한 브로커","Not yet verifiable")} <span>${list.length-ok.length}</span></h3>
-      ${list.filter(b=>b.status!=="verified").map(b=>`<div class="meta">${esc(b.name)} — ${esc(b.note)} <a href="${esc(b.src)}" target="_blank" rel="noopener">↗</a></div>`).join("")||`<div class="dim">${T("없음","none")}</div>`}
+      ${list.filter(b=>b.status!=="verified").map(b=>`<div class="meta">${esc(b.name)} — ${esc((lang==="en"&&b.note_en)?b.note_en:b.note)} <a href="${esc(b.src)}" target="_blank" rel="noopener">↗</a></div>`).join("")||`<div class="dim">${T("없음","none")}</div>`}
       <div class="srcline">${T("데이터 기준일","Data as of")}: ${esc((DB.brokers||{}).as_of||"—")}</div></div>`;
   el("brokersMain").querySelectorAll("[data-bplat]").forEach(x=>x.onclick=()=>{
     const k=x.dataset.bplat; BK.plat.has(k)?BK.plat.delete(k):BK.plat.add(k); renderBrokers();});
