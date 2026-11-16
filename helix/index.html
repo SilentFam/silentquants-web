@@ -2,15 +2,15 @@
 <html lang="ko" data-theme="dark"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Helix — prop firm &amp; broker database | SilentQuants</title>
-<meta name="description" content="SilentFam Helix — 프랍펌 및 브로커 데이터베이스. 참가비·낙폭·지급조건·근거 링크까지 상품별로 추적합니다.">
+<meta name="description" content="SilentQuants Helix — 프랍펌 및 브로커 데이터베이스. 참가비·낙폭·지급조건·근거 링크까지 상품별로 추적합니다.">
 <link rel="canonical" href="https://pataboo.github.io/propfirm-helix/">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="helix">
-<meta property="og:title" content="helix — 프랍펌 챌린지·브로커 데이터베이스">
+<meta property="og:site_name" content="Helix">
+<meta property="og:title" content="Helix — 프랍펌 챌린지·브로커 데이터베이스">
 <meta property="og:description" content="2,367개 챌린지와 19개 브로커를 참가비·낙폭·지급조건·규칙·근거 링크로 비교합니다.">
 <meta property="og:url" content="https://pataboo.github.io/propfirm-helix/">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Dataset","name":"helix — prop firm challenge and broker database","description":"Challenge-level pricing, drawdown, payout terms and trading rules for retail prop firms, plus execution brokers, each with a source URL and verification grade.","url":"https://pataboo.github.io/propfirm-helix/","isAccessibleForFree":true,"creator":{"@type":"Organization","name":"helix"},"keywords":["prop firm","trading challenge","drawdown","payout","broker"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Dataset","name":"Helix — prop firm challenge and broker database","description":"Challenge-level pricing, drawdown, payout terms and trading rules for retail prop firms, plus execution brokers, each with a source URL and verification grade.","url":"https://pataboo.github.io/propfirm-helix/","isAccessibleForFree":true,"creator":{"@type":"Organization","name":"helix"},"keywords":["prop firm","trading challenge","drawdown","payout","broker"]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -187,17 +187,21 @@
   .rnote{margin-top:6px;font-size:11.5px;color:var(--muted);line-height:1.6}
   .srcnote2{margin-top:10px;font-size:11.5px;color:var(--muted);line-height:1.6}
   .sitefoot{border-top:1px solid var(--line);background:var(--panel);margin-top:40px}
-  .sitefoot .in{max-width:1500px;margin:0 auto;padding:26px 22px;display:grid;grid-template-columns:1.6fr .7fr .7fr .7fr .7fr;gap:24px}
+  .sitefoot .in{max-width:900px;margin:0 auto;padding:30px 22px 22px;display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:18px 44px;text-align:center}
+  .sitefoot .fabout{flex:1 1 100%;text-align:center;display:flex;flex-direction:column;align-items:center}
+  .sitefoot .fabout p{margin-left:auto;margin-right:auto}
+  .sitefoot .fcol{text-align:center;min-width:120px}
+  .sitefoot .fcol a{text-align:center}
   .sitefoot .fabout b{font-size:15px;letter-spacing:-.02em}
   .sitefoot p{color:var(--muted);font-size:12px;line-height:1.7;margin:6px 0 0;max-width:52ch}
   .sitefoot .fcol h4{margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted)}
   .sitefoot .fcol a{display:block;font-size:12.5px;color:var(--ink2);text-decoration:none;padding:3px 0}
   .sitefoot .fcol a:hover{color:var(--accent)}
-  .sitefoot .fbot{border-top:1px solid var(--line);padding:12px 22px;color:var(--muted);font-size:11.5px;display:block}
+  .sitefoot .fbot{border-top:1px solid var(--line);padding:12px 22px;color:var(--muted);font-size:11.5px;display:block;text-align:center;max-width:900px;margin:0 auto}
   .smgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px 14px;margin-top:8px}
   .smgrid a{font-size:12.5px;color:var(--ink2);text-decoration:none;padding:3px 0;border-bottom:1px dotted transparent}
   .smgrid a:hover{color:var(--accent);border-bottom-color:var(--line2)}
-  @media(max-width:900px){.sitefoot .in{grid-template-columns:1fr 1fr}}
+  @media(max-width:900px){.sitefoot .in{flex-direction:column;align-items:center}}
   .pfmgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:12px}
   .pfmgrid .glabel{margin-bottom:6px}
   .stars{display:flex;flex-direction:column;gap:3px;margin:8px 0 4px;max-width:320px}
@@ -355,7 +359,7 @@
   .top .in{max-width:none;margin:0;padding:0 16px;display:flex;align-items:center;gap:14px;height:54px}
   .brand{display:flex;align-items:center;gap:11px}
   .brand .mark{width:22px;height:22px;color:var(--accent);flex:none}
-  .brand .wm{font-size:17px;letter-spacing:-.01em;font-weight:700;text-transform:lowercase}
+  .brand .wm{font-size:17px;letter-spacing:-.01em;font-weight:700}
   .brand span{display:block;font-size:10.5px;color:var(--muted);font-weight:500;margin-top:-1px}
   .grow{flex:1}
   .meta{display:flex;gap:18px;font-size:12px;color:var(--muted)}
@@ -629,7 +633,8 @@
   .rstate.no{color:var(--red)}.rstate.no i{background:var(--red)}
   .rstate.mix{color:var(--purple)}.rstate.mix i{background:var(--purple)}
   .rstate.unk{color:var(--muted)}.rstate.unk i{background:var(--muted)}
-  footer{padding:26px 0 90px;color:var(--muted);font-size:12px;line-height:1.7;max-width:860px}
+  footer{padding:26px 0 90px;color:var(--muted);font-size:12px;line-height:1.7}
+  .sitefoot{max-width:none;width:100%}
   @media(max-width:1080px){.shell{grid-template-columns:1fr}.filters{position:static}.stats{grid-template-columns:repeat(2,1fr)}}
   /* the header used to clip its right-hand controls between 760px and ~1080px */
   @media(max-width:1080px){
@@ -678,7 +683,7 @@
       <path d="M13 3.2c-4.9 0-8.6 3.2-8.6 7.4 0 4.2 3.7 7.2 8.6 7.2 4.4 0 7.6-2.4 8.2-5.7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
       <path d="M16.6 21.4c3-.5 5.3-2.4 6.2-5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" opacity=".5"/>
       <path d="M10.1 8.1v9.4M10.1 12.6h4.6M14.7 8.1v9.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
-    </svg><div><b class="wm">helix</b><span id="brandSub"></span></div></a>
+    </svg><div><b class="wm">Helix</b><span id="brandSub"></span></div></a>
   <div class="grow"></div>
   <div class="hsearch" role="search"><span class="dim" aria-hidden="true">⌕</span><input id="gq" autocomplete="off" type="search" aria-label="브랜드·상품 검색 / Search brands and products"></div>
   <div class="navpill" id="subnav" role="navigation" aria-label="주 메뉴 / Main menu">
@@ -890,7 +895,7 @@ pNoCode:"코드 미표기", pCopy:"복사", pCopied:"복사됨",
   fSplit:"수익 분배", fDaily:"일일 손실", fMax:"최대 손실", fTarget:"목표", fDd:"낙폭 방식",
   fLev:"레버리지", fSteps:"방식", fDays:"최소 거래일", fCycle:"지급 주기", fEa:"EA", fNews:"뉴스",
   fKorea:"한국 계좌", fVer:"검증 등급", fSrc:"출처 유형", fSite:"공식 사이트",
-  foot:'<b>SilentFam Helix</b> — 프랍펌 및 브로커 데이터베이스. 값은 상품 단위로 기록되며, <b>미확인</b>은 조사하지 않았다는 뜻으로 0이나 허용을 의미하지 않습니다. 각 상품의 상세에서 근거 링크를 확인하고, 자금 투입 전 반드시 업체 공식 사이트에서 규칙을 다시 확인하세요. · <a href="#method">방법론 · 필드 사전</a>'
+  foot:'<b>SilentQuants Helix</b> — 프랍펌 및 브로커 데이터베이스. 값은 상품 단위로 기록되며, <b>미확인</b>은 조사하지 않았다는 뜻으로 0이나 허용을 의미하지 않습니다. 각 상품의 상세에서 근거 링크를 확인하고, 자금 투입 전 반드시 업체 공식 사이트에서 규칙을 다시 확인하세요. · <a href="#method">방법론 · 필드 사전</a>'
  },
  en:{
   brandSub:"Prop firm & broker database",
@@ -943,7 +948,7 @@ pNoCode:"코드 미표기", pCopy:"복사", pCopied:"복사됨",
   fSplit:"Profit split", fDaily:"Daily loss", fMax:"Max loss", fTarget:"Target", fDd:"Drawdown",
   fLev:"Leverage", fSteps:"Step type", fDays:"Min days", fCycle:"Payout cycle", fEa:"EA", fNews:"News",
   fKorea:"Korea", fVer:"Grade", fSrc:"Source type", fSite:"Official site",
-  foot:'<b>SilentFam Helix</b> — prop firm & broker database. Values are recorded per product; <b>unknown</b> means not researched and never implies zero or permission. Check the evidence links in each product detail and verify rules on the firm\u2019s own site before funding. · <a href="#method">Method &amp; field dictionary</a>'
+  foot:'<b>SilentQuants Helix</b> — prop firm & broker database. Values are recorded per product; <b>unknown</b> means not researched and never implies zero or permission. Check the evidence links in each product detail and verify rules on the firm\u2019s own site before funding. · <a href="#method">Method &amp; field dictionary</a>'
  }
 };
 
@@ -2192,7 +2197,7 @@ function applyTheme(){
   try{ localStorage.removeItem("helix-theme"); }catch(e){}
 }
 let pageSuffix="";
-function setTitle(sfx){ pageSuffix=sfx||""; document.title=sfx?("helix — "+sfx):"helix"; }
+function setTitle(sfx){ pageSuffix=sfx||""; document.title=sfx?("Helix — "+sfx):"Helix"; }
 const Tset=(id,v)=>{const e=document.getElementById(id); if(e) e.textContent=v;};
 function fillMenuCounts(){
   const n=(v)=>Number(v||0).toLocaleString("en-US");
@@ -2346,12 +2351,12 @@ const FAQ={
          en:[["Where do the promo codes come from?","Only from the firm's own page. We do not republish another comparison site's partner codes."],
          ["Why is a code missing?","Because we have not confirmed a public promotion for that firm yet. We do not fill it with an estimate."],
          ["How fresh are the discounts?","As of the date we checked the firm's page, recorded per row. Confirm at the firm's checkout before paying."]]},
- challenges:{ko:[["상품이 2,166개인데 왜 업체는 71개인가요?","한 업체가 여러 상품(계좌 규모 × 프로그램)을 운영하기 때문입니다. 한 행이 하나의 상품입니다."],
+ challenges:{ko:[["상품이 {N}개인데 왜 업체는 {F}개인가요?","한 업체가 여러 상품(계좌 규모 × 프로그램)을 운영하기 때문입니다. 한 행이 하나의 상품입니다."],
              ["왜 어떤 상품은 금액이 비어 있나요?","해당 값을 아직 기록하지 못한 경우입니다. 0으로 채우지 않습니다."],
              ["등급 옆에 붙은 C는 무엇인가요?","그 값을 업체 공식 페이지에서 아직 확인하지 못했다는 뜻입니다. 3자 출처에서 옮긴 값에만 붙이며, 공식 확인 후 A로 올라갑니다."],
              ["비교는 어떻게 하나요?","행을 클릭해 상세를 열고, 카드의 ‘비교에 추가’로 담은 뒤 하단 Compare에서 2~5개를 나란히 볼 수 있습니다."],
              ["얼마나 자주 갱신되나요?","주 단위로 바뀝니다. 페이지 상단에 빌드 날짜, 행마다 확인 날짜가 표시됩니다."]],
-             en:[["2,166 products but only 71 brands?","One brand runs many products (size × programme). Each row is a single product."],
+             en:[["{N} products but only {F} brands?","One brand runs many products (size × programme). Each row is a single product."],
              ["Why are some values blank?","Because that value has not been recorded yet. We never fill blanks with zero."],
              ["What does the C next to a value mean?","It means we have not confirmed that value on the firm's own page yet. It only appears on values taken from a third-party source, and it becomes an A once we verify it at the source."],
              ["How do I compare?","Open a row for details, add it to compare, then open Compare to see 2-5 side by side."],
@@ -2375,10 +2380,24 @@ const FAQ={
         en:[["What will Trading Tools contain?","The tools SilentFam actually uses, released as they are ready."],
         ["What can I use today?","HELIX itself is the first tool."]]}
 };
+/* 사이트 숫자는 한 곳에서 나온다. 문자열에 {N} {F} {A} 토큰을 쓰면 여기서 치환된다. */
+function siteStats(){
+  const rows=(typeof DB!=="undefined"&&DB.rows)||[];
+  const n=rows.length, f=new Set(rows.map(r=>r.f)).size;
+  const a=n?Math.round(rows.filter(r=>r.vf==="A").length/n*100):0;
+  return {n:n,f:f,a:a};
+}
+function subst(t){
+  const st=siteStats();
+  return String(t==null?"":t)
+    .replace(/\{N\}/g, st.n.toLocaleString("en-US"))
+    .replace(/\{F\}/g, String(st.f))
+    .replace(/\{A\}/g, String(st.a)+"%");
+}
 function faqBlock(list){
   const arr = Array.isArray(list) ? list : (list[lang] || list.ko || []);
   return `<div class="faq"><h3>${lang==="ko"?"자주 묻는 질문":"FAQ"}</h3>` +
-    arr.map(([q,a])=>`<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("") + `</div>`;
+    arr.map(([q,a])=>`<details><summary>${esc(subst(q))}</summary><p>${esc(subst(a))}</p></details>`).join("") + `</div>`;
 }
 function srcNote(extra){
   return `<div class="src"><b>${lang==="ko"?"출처":"Source"}</b> ${extra}</div>`;
@@ -3522,7 +3541,7 @@ function renderSiteFoot(){
   const T=(ko,en)=>lang==="ko"?ko:en;
   const col=(title,items)=>`<div class="fcol"><h4>${esc(title)}</h4>${items.map(([h,l])=>`<a href="#${h}">${esc(l)}</a>`).join("")}</div>`;
   f.innerHTML=`<div class="in">
-    <div class="fabout"><b>helix</b>
+    <div class="fabout"><b>Helix</b>
       <p>${T("프랍펌 챌린지와 브로커를 같은 기준으로 비교합니다. 모든 값에는 출처 URL과 검증 등급이 붙고, 확인하지 못한 값은 비워 둡니다.","Prop-firm challenges and brokers compared on one basis. Every value carries a source URL and a grade; what we could not confirm stays blank.")}</p>
       <p class="dim">${T("빌드 기준일","Built")}: ${esc(DB.built||"—")} · ${T("상품 데이터 출처","Product data")}: 각 업체 공식 페이지 + propfirmmatch.com · <a href="sitemap.xml">sitemap.xml</a></p></div>
     ${col(T("데이터","Data"),[["challenges",T("챌린지","Challenges")],["firms",T("프랍펌","Firms")],["brokers",T("브로커","Brokers")],["rules",T("규칙","Rules")],["offers",T("프로모션","Offers")]])}
@@ -3530,7 +3549,6 @@ function renderSiteFoot(){
     ${col(T("정보","About"),[["method",T("방법론·필드","Method")],["docs",T("문서","Docs")],["sitemap",T("사이트맵","Site map")]])}
     <div class="fcol"><h4>SilentFam</h4>
       <a href="https://silentquants.com/" target="_blank" rel="noopener">SilentQuants ↗</a>
-      <a href="https://silentquants.com/tools/helix/" target="_blank" rel="noopener">${T("헬릭스 소개 페이지","Helix in SilentQuants")} ↗</a>
     </div>
   </div>
   <div class="in fbot"><span>${T("개인 프로젝트입니다. 투자 권유가 아니며, 표시된 값은 각 업체 페이지의 기록입니다.","A personal project. Not investment advice; every figure is a record of what a firm publishes.")}</span></div>`;
