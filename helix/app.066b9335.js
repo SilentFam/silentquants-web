@@ -133,7 +133,7 @@ const DB=window.HELIX_DB,rows=DB.rows,ASSET={ko:{cfd:"CFD",fut:"선물",futures:
       ${drawerRow(t("cTargets"),s.tx&&s.tx.length?s.tx.map(i=>i+"%").join(" / ")+` <span class="dim">(${esc(s.sg||s.tx.length)}단계)</span>`:s.tg?esc(s.tg)+"%":'<span class="dim">—</span>')}
       ${drawerRow(t("cConsist"),s.cs?esc(s.cs):'<span class="dim">—</span>')}
       ${drawerRow(t("cStepDetail"),s.stp?esc(s.stp):'<span class="dim">—</span>')}
-      ${drawerRow(t("cLeverageDetail"),s.lvp?esc(s.lvp):'<span class="dim">—</span>')}
+      ${drawerRow(t("cLeverageDetail"),s.lvp?esc(tx(s.lvp)):'<span class="dim">—</span>')}
       ${drawerRow(t("cPfmRef"),s.dp!=null||s.mp!=null?`${esc(s.dp??"—")}% / ${esc(s.mp??"—")}%`:'<span class="dim">—</span>')}
     </div>
     <div class="sect">${esc(t("sectFloor"))}</div>${floorChart(s.dd==="Trailing"?"Trailing":"Static")}
@@ -228,7 +228,7 @@ const DB=window.HELIX_DB,rows=DB.rows,ASSET={ko:{cfd:"CFD",fut:"선물",futures:
     <div class="panel"><h3>${esc(t("sectCond"))}</h3>
       <div class="rules">${ruleChip(t("fEa"),s.ec)}${ruleChip(t("fNews"),s.nc)}${ruleChip(t("fOn"),s.oc)}
       ${ruleChip(t("fCp"),s.cc)}${ruleChip(t("fWk"),s.wk)}</div>
-      <div class="kv" style="margin-top:12px">${drawerRow(t("cLev"),s.lv?esc(s.lv)+(s.lx?` <span class="dim">(${esc(s.lx)})</span>`:""):s.lx?esc(s.lx):esc(s.lvp||"—"))}
+      <div class="kv" style="margin-top:12px">${drawerRow(t("cLev"),s.lv?esc(s.lv)+(s.lx?` <span class="dim">(${esc(s.lx)})</span>`:""):s.lx?esc(s.lx):esc(tx(s.lvp||"—")))}
       ${drawerRow(t("cKorea"),esc(enumv(s.kr)||"—"))}${drawerRow(t("cMt5"),s.m5===!0?"✓":"?")}</div></div>
 
     <div class="panel"><h3>${esc(t("sectNotes"))}</h3><div id="notesHost">${notesBlock(fullNote(s))}</div></div>
@@ -401,7 +401,7 @@ const DB=window.HELIX_DB,rows=DB.rows,ASSET={ko:{cfd:"CFD",fut:"선물",futures:
      ${[["auto",lang==="ko"?"자동":"Auto"],["pct","% "+(lang==="ko"?"퍼센트":"percent")],["usd","$ "+(lang==="ko"?"달러":"dollar")]].map(([o,n])=>`<label class="tsrow"><input type="radio" name="unitMode" value="${o}" ${unitMode===o?"checked":""}> ${esc(n)}</label>`).join("")}
      <div class="tshead" style="margin-top:6px">${lang==="ko"?"밀도":"Density"}</div>
      <label class="tsrow"><input type="checkbox" id="denseChk" ${dense?"checked":""}> ${lang==="ko"?"컴팩트":"Compact"}</label>
-     <div class="tsrow" id="tsReset" style="color:var(--accent);font-weight:700">${lang==="ko"?"초기화":"Reset"}</div>`,e.querySelectorAll("[data-c]").forEach(o=>o.onchange=()=>{colVis[Number(o.dataset.c)]=o.checked?1:0,applyTablePrefs()}),e.querySelectorAll("input[name=unitMode]").forEach(o=>o.onchange=()=>{unitMode=o.value,localStorage.setItem("helix-unit",unitMode),render()});const s=el("denseChk");s&&(s.onchange=()=>{dense=s.checked,applyTablePrefs()});const a=el("tsReset");a&&(a.onclick=o=>{o.preventDefault(),colVis=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1],dense=!1,applyTablePrefs(),buildTableSettings()})}function renderDocs(){const e=[["offer_id","상품 고유 ID (예: CH-AC6DD)"],["provider / product","브랜드와 상품명"],["asset_class","cfd · fut · crypto · stocks · syn"],["size","계좌 명목 규모"],["entry_fee / activation_fee / total_fee_known","참가비·활성화비·확인된 총비용"],["maxloss_raw / daily_loss_raw","최대 손실·일일 손실 (기록된 원문)"],["drawdown_type_raw","Static · Trailing 등 낙폭 계산 방식"],["split_pct","수익 분배율"],["payout_cycle / payout_first","지급 주기와 첫 지급 조건"],["ea_eval / news_eval / on_eval / cp_eval","단계별 규칙 허용 여부"],["review_status","미검토·검토됨·3자 출처"],["verified","등급 A/B/C"]],s=(n,l)=>lang==="ko"?n:l,o=[["가격","pr","Price"],["목표","tg","Target"],["최대 손실","ml","Max loss"],["일일 손실","dl","Daily loss"],["최소 거래일","md","Min days"],["분배","sp","Split"],["지급 주기","pc","Payout cycle"],["낙폭 유형","dd","Drawdown type"],["EA 규칙","ec","EA rule"],["뉴스 규칙","nc","News rule"],["카피 규칙","cc","Copy rule"],["주말 규칙","wk","Weekend rule"],["MT5","m5","MT5"],["출처 URL","ur","Source URL"]].map(function(n){var l=n[1],r=rows.filter(function(d){var i=d[l];return i!=null&&i!==""&&i!=="—"}).length;return[lang==="ko"?n[0]:n[2],Math.round(r/rows.length*100)]});el("docsMain").innerHTML=`
+     <div class="tsrow" id="tsReset" style="color:var(--accent);font-weight:700">${lang==="ko"?"초기화":"Reset"}</div>`,e.querySelectorAll("[data-c]").forEach(o=>o.onchange=()=>{colVis[Number(o.dataset.c)]=o.checked?1:0,applyTablePrefs()}),e.querySelectorAll("input[name=unitMode]").forEach(o=>o.onchange=()=>{unitMode=o.value,localStorage.setItem("helix-unit",unitMode),render()});const s=el("denseChk");s&&(s.onchange=()=>{dense=s.checked,applyTablePrefs()});const a=el("tsReset");a&&(a.onclick=o=>{o.preventDefault(),colVis=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1],dense=!1,applyTablePrefs(),buildTableSettings()})}function renderDocs(){const e=[["offer_id",s("상품 고유 ID (예: CH-AC6DD)","Product id (e.g. CH-AC6DD)")],["provider / product",s("브랜드와 상품명","Brand and product name")],["asset_class","cfd · fut · crypto · stocks · syn"],["size",s("계좌 명목 규모","Nominal account size")],["entry_fee / activation_fee / total_fee_known",s("참가비·활성화비·확인된 총비용","Entry fee, activation fee, total known cost")],["maxloss_raw / daily_loss_raw",s("최대 손실·일일 손실 (기록된 원문)","Max loss and daily loss, as recorded")],["drawdown_type_raw",s("Static · Trailing 등 낙폭 계산 방식","How drawdown is calculated")],["split_pct",s("수익 분배율","Profit split")],["payout_cycle / payout_first",s("지급 주기와 첫 지급 조건","Payout cycle and first-payout condition")],["ea_eval / news_eval / on_eval / cp_eval",s("단계별 규칙 허용 여부","Rule status per stage")],["review_status",s("미검토·검토됨·3자 출처","Not reviewed, reviewed, third-party")],["verified",s("등급 A/B/C","Grade A / B / C")]],s=(n,l)=>lang==="ko"?n:l,o=[["가격","pr","Price"],["목표","tg","Target"],["최대 손실","ml","Max loss"],["일일 손실","dl","Daily loss"],["최소 거래일","md","Min days"],["분배","sp","Split"],["지급 주기","pc","Payout cycle"],["낙폭 유형","dd","Drawdown type"],["EA 규칙","ec","EA rule"],["뉴스 규칙","nc","News rule"],["카피 규칙","cc","Copy rule"],["주말 규칙","wk","Weekend rule"],["MT5","m5","MT5"],["출처 URL","ur","Source URL"]].map(function(n){var l=n[1],r=rows.filter(function(d){var i=d[l];return i!=null&&i!==""&&i!=="—"}).length;return[lang==="ko"?n[0]:n[2],Math.round(r/rows.length*100)]});el("docsMain").innerHTML=`
     <div class="hero2"><h1>${lang==="ko"?"Helix 문서":"Helix docs"}</h1>
       <p>${lang==="ko"?"데이터가 어떻게 구성되어 있고, 각 값이 무엇을 뜻하며, 어떻게 인용하는지 정리했습니다.":"How the data is structured, what each value means, and how to cite it."}</p>
       <p class="note">${lang==="ko"?'이 데이터베이스는 팔지 않습니다. 유료 벽도, 광고 순위도 없습니다. 매주 다시 확인하는 시간이 실제 비용이고, 그 비용을 어떻게 쓰는지는 <a href="https://silentquants.com/ko/support/" target="_blank" rel="noopener">후원 페이지</a>에 적어두었습니다. 틀린 값은 <a href="mailto:hello@silentfam.com?subject=Helix%20error%20report">메일</a>로 알려주시면 고칩니다.':'This database is not for sale. No paywall, no paid ranking. The real cost is the hours spent re-checking rows, and where that money would go is written on the <a href="https://silentquants.com/support/" target="_blank" rel="noopener">support page</a>. If a value is wrong, <a href="mailto:hello@silentfam.com?subject=Helix%20error%20report">tell us</a> and we will fix it.'}</p></div>
@@ -534,7 +534,7 @@ const DB=window.HELIX_DB,rows=DB.rows,ASSET={ko:{cfd:"CFD",fut:"선물",futures:
         <td>${o.site?`<a href="${esc(o.site)}" target="_blank" rel="noopener" style="font-size:12px">site ↗</a>`:""}</td>
       </tr>`).join("")}</tbody></table></div></div>
     ${faqBlock([[lang==="ko"?"브랜드 수가 자주 바뀌나요?":"Do brands change often?",lang==="ko"?"새 브랜드가 추가되면 자동으로 이 목록에 나타납니다.":"New brands appear here automatically once records exist."]])}
-    ${srcNote(lang==="ko"?"브랜드·상품 수는 HELIX 기록 기준입니다.":"Brand and product counts come from HELIX records.")}`}function renderOffers(){const e={};rows.forEach(o=>{if(!o.co&&!o.pt&&!o.px)return;const n=e[o.f]||(e[o.f]={code:null,text:null,exp:null});!n.code&&o.co&&(n.code=o.co),!n.text&&(o.pt||o.po)&&(n.text=o.pt||o.po),!n.exp&&o.px&&(n.exp=o.px)});const s=Object.entries(e).sort((o,n)=>o[0].localeCompare(n[0])),a=s.filter(([,o])=>offersFilter==="official"?!!o.code:offersFilter==="expiry"?!!o.exp:!0);el("offersMain").innerHTML=`
+    ${srcNote(lang==="ko"?"브랜드·상품 수는 HELIX 기록 기준입니다.":"Brand and product counts come from HELIX records.")}`}function renderOffers(){const e={};rows.forEach(o=>{if(!o.co&&!o.pt&&!o.px)return;const n=e[o.f]||(e[o.f]={code:null,text:null,exp:null});!n.code&&o.co&&(n.code=o.co),!n.text&&(o.pt||o.po)&&(n.text=tx(o.pt||o.po)),!n.exp&&o.px&&(n.exp=o.px)});const s=Object.entries(e).sort((o,n)=>o[0].localeCompare(n[0])),a=s.filter(([,o])=>offersFilter==="official"?!!o.code:offersFilter==="expiry"?!!o.exp:!0);el("offersMain").innerHTML=`
     <div class="hero2"><h1>${lang==="ko"?"업체가 공개한 프로모션만":"Only offers the firms publish"}</h1>
       <p>${lang==="ko"?`${a.length}개 브랜드. 업체 공식 페이지에서 직접 확인한 코드만 싣습니다. 다른 비교 사이트의 파트너 코드는 재배포하지 않습니다.`:`${a.length} brands. Only codes read from the firm's own page. We do not republish other sites' partner codes.`}</p></div>
     <div class="stats">
@@ -588,8 +588,8 @@ const DB=window.HELIX_DB,rows=DB.rows,ASSET={ko:{cfd:"CFD",fut:"선물",futures:
         <td class="firm"><a href="#firm/${encodeURIComponent(l.f)}" style="color:inherit;text-decoration:none;border-bottom:1px dotted var(--line2)">${esc(l.f)}</a></td>
         <td class="num">${l.n}</td>
         <td>${l.sp?`<b>${esc(l.sp)}%</b>`:'<span class="dim">—</span>'}</td>
-        <td>${l.pc?esc(l.pc):'<span class="dim">—</span>'}</td>
-        <td>${l.pf?esc(l.pf):'<span class="dim">—</span>'}</td>
+        <td>${l.pc?esc(tx(l.pc)):'<span class="dim">—</span>'}</td>
+        <td>${l.pf?esc(tx(l.pf)):'<span class="dim">—</span>'}</td>
         <td class="num">${l.ym!=null?money(l.ym,"USD"):'<span class="dim">—</span>'}</td>
         <td class="num">${l.yk!=null?l.yk===0?'<span class="dim">무제한</span>':money(l.yk,"USD"):'<span class="dim">—</span>'}</td>
       </tr>`).join("")}</tbody></table></div></div>
@@ -693,7 +693,7 @@ const DB=window.HELIX_DB,rows=DB.rows,ASSET={ko:{cfd:"CFD",fut:"선물",futures:
       ${P!=null?`<dt>${esc(t("cCap"))}</dt><dd>${P===0?"무제한":money(P,"USD")}</dd>`:""}
       ${x?`<dt>${esc(t("cMin"))}</dt><dd style="white-space:normal">${esc(x)}</dd>`:""}
     </dl></div>`},k=v.slice(0,6).map(g).join(""),m=v.length>6?v.slice(6).map(g).join(""):"",c=(f,b)=>{const w=s.map(M=>flagOf(M[b])),A=ruleState(w),L=w.filter(M=>M==="y").length,x=w.filter(M=>M==="c").length,P=w.filter(M=>M==="n").length,T=w.filter(M=>M==="u").length,j=w.length,R=j-T,C=[(lang==="ko"?"기록 ":"recorded ")+R+"/"+j];return x&&C.push((lang==="ko"?"조건부 ":"conditional ")+x),P&&C.push((lang==="ko"?"금지 ":"banned ")+P),`<div class="rst"><span class="rstate ${A.k}"><i></i>${esc(f)} ${esc(A.lbl)}</span>
-      <span class="rstd">${esc(C.join(" · "))}</span></div>`},u=[["EA","ec"],[lang==="ko"?"뉴스":"News","nc"],[lang==="ko"?"오버나이트":"Overnight","oc"],[lang==="ko"?"카피":"Copy","cc"],[lang==="ko"?"주말":"Weekend","wk"]].map(([f,b])=>c(f,b)).join(""),$=(DB.pfmRules||{})[e]||"",y=(DB.eap||{})[e]||{},S=y.platforms||[],N=y.us_platforms||[],D=[[lang==="ko"?"EA 정책":"EA policy",y.ea],[lang==="ko"?"카피 트레이딩":"Copy trading",y.copy]].filter(f=>f[1]!=null&&String(f[1]).trim()),V=!S.length&&!N.length&&!D.length&&!(y.comment||"").trim(),_=s.map(f=>cycDays(f.pc)).filter(f=>f!=null),W=_.length?Math.min.apply(null,_):null,O=s.map(f=>num(f.yk)).filter(f=>f!=null),I=O.length?Math.max.apply(null,O):null,G=O.indexOf(0)>=0,z=s.map(f=>num(f.sp)).filter(f=>f!=null),B=(DB.pay||{})[e]||{},K=B.methods||[],U=[...new Set(s.filter(f=>f.co||f.pt).map(f=>`${f.co||""}||${f.pt||f.po||""}||${f.px||""}`))].map(f=>{const[b,w,A]=f.split("||");return{co:b,pt:w,px:A}}),H=[...new Set(s.flatMap(f=>Array.isArray(f.ad)?f.ad:[]))].slice(0,12),X=s.slice().sort((f,b)=>(num(f.s)??0)-(num(b.s)??0)).map(f=>`
+      <span class="rstd">${esc(C.join(" · "))}</span></div>`},u=[["EA","ec"],[lang==="ko"?"뉴스":"News","nc"],[lang==="ko"?"오버나이트":"Overnight","oc"],[lang==="ko"?"카피":"Copy","cc"],[lang==="ko"?"주말":"Weekend","wk"]].map(([f,b])=>c(f,b)).join(""),$=(DB.pfmRules||{})[e]||"",y=(DB.eap||{})[e]||{},S=y.platforms||[],N=y.us_platforms||[],D=[[lang==="ko"?"EA 정책":"EA policy",y.ea],[lang==="ko"?"카피 트레이딩":"Copy trading",y.copy]].filter(f=>f[1]!=null&&String(f[1]).trim()),G=!S.length&&!N.length&&!D.length&&!(y.comment||"").trim(),_=s.map(f=>cycDays(f.pc)).filter(f=>f!=null),W=_.length?Math.min.apply(null,_):null,O=s.map(f=>num(f.yk)).filter(f=>f!=null),I=O.length?Math.max.apply(null,O):null,V=O.indexOf(0)>=0,B=s.map(f=>num(f.sp)).filter(f=>f!=null),z=(DB.pay||{})[e]||{},K=z.methods||[],U=[...new Set(s.filter(f=>f.co||f.pt).map(f=>`${f.co||""}||${f.pt||f.po||""}||${f.px||""}`))].map(f=>{const[b,w,A]=f.split("||");return{co:b,pt:w,px:A}}),H=[...new Set(s.flatMap(f=>Array.isArray(f.ad)?f.ad:[]))].slice(0,12),X=s.slice().sort((f,b)=>(num(f.s)??0)-(num(b.s)??0)).map(f=>`
     <tr data-id="${esc(f.i)}">
       <td class="firm">${esc(f.p)}</td>
       <td>${esc(enumv(f.st)||f.ty||"—")}</td>
@@ -753,7 +753,7 @@ const DB=window.HELIX_DB,rows=DB.rows,ASSET={ko:{cfd:"CFD",fut:"선물",futures:
 
     <div class="panel fpanel" id="fPlat">
       <h3>${lang==="ko"?"EA · 플랫폼":"Platforms · EA"} <span class="ct">${lang==="ko"?`플랫폼 ${S.length}개`:`${S.length} platform${S.length===1?"":"s"}`}</span></h3>
-      ${V?`<div class="empty-inline">${lang==="ko"?"이 브랜드의 플랫폼·EA 정책은 아직 수집되지 않았습니다. 비어 있는 값을 추정해 채우지 않습니다.":"Platforms and EA policy for this brand are not collected yet. Empty values are not estimated."}</div>`:`
+      ${G?`<div class="empty-inline">${lang==="ko"?"이 브랜드의 플랫폼·EA 정책은 아직 수집되지 않았습니다. 비어 있는 값을 추정해 채우지 않습니다.":"Platforms and EA policy for this brand are not collected yet. Empty values are not estimated."}</div>`:`
         ${S.length?`<div class="chips" style="margin-bottom:10px">${S.map(f=>`<span class="chip2">${esc(f)}</span>`).join("")}</div>`:""}
         ${N.length?`<div class="plrow"><div class="k">${lang==="ko"?"미국 트레이더":"US traders"}</div><div class="v">${N.map(f=>esc(f)).join(" · ")}</div></div>`:""}
         ${D.map(f=>`<div class="plrow"><div class="k">${esc(f[0])}</div><div class="v">${esc(String(f[1]).slice(0,600))}</div></div>`).join("")}
@@ -770,21 +770,21 @@ const DB=window.HELIX_DB,rows=DB.rows,ASSET={ko:{cfd:"CFD",fut:"선물",futures:
           <div class="k">${lang==="ko"?"최단 지급 주기":"fastest cycle"}</div></div>
         <div class="kpi"><div class="v a">${I!=null?I===0?lang==="ko"?"무제한":"unlimited":money(I,"USD"):'<span class="dim">—</span>'}</div>
           <div class="k">${lang==="ko"?"최대 지급 상한":"largest cap"}</div></div>
-        <div class="kpi"><div class="v c">${z.length?Math.min.apply(null,z)===Math.max.apply(null,z)?z[0]+"%":Math.min.apply(null,z)+"–"+Math.max.apply(null,z)+"%":'<span class="dim">—</span>'}</div>
+        <div class="kpi"><div class="v c">${B.length?Math.min.apply(null,B)===Math.max.apply(null,B)?B[0]+"%":Math.min.apply(null,B)+"–"+Math.max.apply(null,B)+"%":'<span class="dim">—</span>'}</div>
           <div class="k">${lang==="ko"?"수익 분배 범위":"profit split"}</div></div>
       </div>
       ${k||`<div class="empty-inline">${lang==="ko"?"프로그램별 지급 기록이 없습니다.":"No per-program payout records."}</div>`}
       ${m?`<details style="margin-top:4px">
         <summary style="cursor:pointer;font-size:12px;font-weight:800;color:var(--ink2)">${lang==="ko"?`나머지 ${v.length-6}개 프로그램`:`${v.length-6} more programmes`}</summary>
         <div style="margin-top:10px">${m}</div></details>`:""}
-      ${G?`<div class="empty-inline" style="margin-top:6px">${lang==="ko"?"일부 상품은 지급 상한이 0(무제한)으로 기록되어 있습니다.":"Some products record a payout cap of 0 (unlimited)."}</div>`:""}
+      ${V?`<div class="empty-inline" style="margin-top:6px">${lang==="ko"?"일부 상품은 지급 상한이 0(무제한)으로 기록되어 있습니다.":"Some products record a payout cap of 0 (unlimited)."}</div>`:""}
       <div style="margin-top:14px">
         <div style="font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:800;margin-bottom:8px">${lang==="ko"?"지급 수단":"Payout methods"}</div>
         ${K.length?`<div class="chips">${K.map(f=>`<span class="chip2">${esc(f)}</span>`).join("")}</div>`:`<div class="empty-inline">${lang==="ko"?"지급 수단은 아직 수집되지 않았습니다.":"Payout methods are not collected yet."}</div>`}
-        ${B.quote?`<details style="margin-top:10px">
+        ${z.quote?`<details style="margin-top:10px">
           <summary style="cursor:pointer;font-size:12px;font-weight:800;color:var(--ink2)">${lang==="ko"?"근거 원문":"Source quote"}</summary>
-          <div style="font-size:12px;line-height:1.7;color:var(--ink2);margin-top:8px">${esc(String(B.quote).slice(0,900))}</div>
-          ${B.source?`<div style="font-size:11px;color:var(--muted);margin-top:6px;word-break:break-all">${esc(B.source)}</div>`:""}</details>`:""}
+          <div style="font-size:12px;line-height:1.7;color:var(--ink2);margin-top:8px">${esc(String(z.quote).slice(0,900))}</div>
+          ${z.source?`<div style="font-size:11px;color:var(--muted);margin-top:6px;word-break:break-all">${esc(z.source)}</div>`:""}</details>`:""}
       </div>
     </div>
 
