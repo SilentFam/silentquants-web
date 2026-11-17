@@ -836,8 +836,8 @@
 </div></div>
 
 
-<script>window.HELIX_VER="f74f250d";</script>
-<script src="data.js?v=f74f250d"></script>
+<script>window.HELIX_VER="f943a4f8";</script>
+<script src="data.js?v=f943a4f8"></script>
 <script>
 const DB = window.HELIX_DB;
 const rows = DB.rows;
@@ -1286,6 +1286,20 @@ function ensureNotes(cb){
   _notesReq.then(()=>cb&&cb());
 }
 function fullNote(r){ return (window.HELIX_NOTES && window.HELIX_NOTES[r.i]) || r.no || ""; }
+/* 상세 필드는 details.js로 분리 (목록 payload를 가볍게 유지) */
+let DETAILS=null, DET_LOADING=false, DET_WAIT=[];
+function ensureDetails(cb){
+  if(DETAILS){ if(cb) cb(); return; }
+  if(cb) DET_WAIT.push(cb);
+  if(DET_LOADING) return;
+  DET_LOADING=true;
+  const sc=document.createElement("script");
+  sc.src="details.js?v="+(window.HELIX_VER||"1");
+  sc.onload=function(){ DETAILS=window.HELIX_DETAILS||{}; const q=DET_WAIT; DET_WAIT=[];
+    q.forEach(function(f){try{f()}catch(e){}}); };
+  sc.onerror=function(){ DETAILS={}; DET_LOADING=false; };
+  document.head.appendChild(sc);
+}
 /* 메모 번역은 300KB라서 필요할 때 따로 받는다 (영문 모드에서 드로어를 열 때). */
 let NOTES_EN=null, NE_LOADING=false, NE_WAIT=[];
 function ensureNotesEn(cb){
@@ -2095,6 +2109,10 @@ let drawerReturn=null;
 function openDrawer(id){
   const r=rows.find(x=>x.i===id); if(!r) return;
   activeId=id;
+  /* 상세 필드(근거 URL·전체 메모·규칙 원문)는 목록 payload에서 빠져 있다.
+     처음 열 때 한 번만 받아서 행에 합치고 다시 그린다. */
+  if(!DETAILS){ ensureDetails(function(){ if(activeId===id) openDrawer(id); }); }
+  else if(DETAILS[r.i]) Object.assign(r, DETAILS[r.i]);
   el("dTitle").innerHTML=`${esc(r.f)} <span class="pill p-${esc(r.vf||"C")}">${esc(t("grade"))} ${esc(r.vf||"—")}</span>`;
   const pl=pfmLink(r);
   el("dSub").innerHTML=`${esc(r.p)} · ${r.s?Number(r.s).toLocaleString('en-US'):"—"} ${esc(r.cu||"")} · ${esc(assetLabel(r.mk))}`+
@@ -2315,7 +2333,8 @@ document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{
   else if(_p==="offers"&&typeof renderOffers==="function") renderOffers();
   if(activeId) openDrawer(activeId);
 });
-el("gq").addEventListener("input",e=>{q=e.target.value.toLowerCase().trim();render();});
+el("gq").addEventListener("input",e=>{q=e.target.value.toLowerCase().trim();render();
+  if(q.length>=2 && !DETAILS) ensureDetails(function(){ render(); });});
 document.querySelectorAll("thead th[data-sort]").forEach(th=>{
   th.tabIndex=0; th.setAttribute("aria-sort","none");
   th.onclick=()=>{
