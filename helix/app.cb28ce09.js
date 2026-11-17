@@ -527,7 +527,7 @@ const DB=window.HELIX_DB,rows=DB.rows,ASSET={ko:{cfd:"CFD",fut:"선물",futures:
         <td>${o.site?`<a href="${esc(o.site)}" target="_blank" rel="noopener" style="font-size:12px">site ↗</a>`:""}</td>
       </tr>`).join("")}</tbody></table></div></div>
     ${faqBlock([[lang==="ko"?"브랜드 수가 자주 바뀌나요?":"Do brands change often?",lang==="ko"?"새 브랜드가 추가되면 자동으로 이 목록에 나타납니다.":"New brands appear here automatically once records exist."]])}
-    ${srcNote(lang==="ko"?"브랜드·상품 수는 HELIX 기록 기준입니다.":"Brand and product counts come from HELIX records.")}`}function renderOffers(){const e={};rows.forEach(o=>{if(!o.co&&!o.pt&&!o.px)return;const n=e[o.f]||(e[o.f]={code:null,text:null,exp:null});!n.code&&o.co&&(n.code=o.co),!n.text&&(o.pt||o.po)&&(n.text=o.pt||o.po),!n.exp&&o.px&&(n.exp=o.px)});const s=Object.entries(e).sort((o,n)=>o[0].localeCompare(n[0])),a=s.filter(([,o])=>offersFilter==="official"?!!o.code:offersFilter==="expiry"?!!o.exp:!0);el("offersMain").innerHTML=`
+    ${srcNote(lang==="ko"?"브랜드·상품 수는 HELIX 기록 기준입니다.":"Brand and product counts come from HELIX records.")}`}function renderOffers(){const e={};rows.forEach(o=>{if(!o.co&&!o.pt&&!o.px)return;const n=e[o.f]||(e[o.f]={code:null,text:null,exp:null});!n.code&&o.co&&(n.code=o.co),!n.text&&(o.pt||o.po)&&(n.text=tx(o.pt||o.po)),!n.exp&&o.px&&(n.exp=o.px)});const s=Object.entries(e).sort((o,n)=>o[0].localeCompare(n[0])),a=s.filter(([,o])=>offersFilter==="official"?!!o.code:offersFilter==="expiry"?!!o.exp:!0);el("offersMain").innerHTML=`
     <div class="hero2"><h1>${lang==="ko"?"업체가 공개한 프로모션만":"Only offers the firms publish"}</h1>
       <p>${lang==="ko"?`${a.length}개 브랜드. 업체 공식 페이지에서 직접 확인한 코드만 싣습니다. 다른 비교 사이트의 파트너 코드는 재배포하지 않습니다.`:`${a.length} brands. Only codes read from the firm's own page. We do not republish other sites' partner codes.`}</p></div>
     <div class="stats">
@@ -582,7 +582,7 @@ const DB=window.HELIX_DB,rows=DB.rows,ASSET={ko:{cfd:"CFD",fut:"선물",futures:
         <td class="num">${l.n}</td>
         <td>${l.sp?`<b>${esc(l.sp)}%</b>`:'<span class="dim">—</span>'}</td>
         <td>${l.pc?esc(l.pc):'<span class="dim">—</span>'}</td>
-        <td>${l.pf?esc(l.pf):'<span class="dim">—</span>'}</td>
+        <td>${l.pf?esc(tx(l.pf)):'<span class="dim">—</span>'}</td>
         <td class="num">${l.ym!=null?money(l.ym,"USD"):'<span class="dim">—</span>'}</td>
         <td class="num">${l.yk!=null?l.yk===0?'<span class="dim">무제한</span>':money(l.yk,"USD"):'<span class="dim">—</span>'}</td>
       </tr>`).join("")}</tbody></table></div></div>
