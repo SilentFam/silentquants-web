@@ -679,7 +679,7 @@
 <a class="skip" id="skipLink" href="#main">본문으로 건너뛰기 · Skip to content</a>
 <a class="skip" id="skipTable" href="#tableView">표 데이터로 건너뛰기 · Skip to the table</a>
 <div class="top"><div class="in">
-  <a href="https://silentquants.com/" class="backhome" title="SilentQuants로 돌아가기" aria-label="SilentQuants로 돌아가기">←</a>
+  <a href="https://silentquants.com/" id="backHome" class="backhome" title="SilentQuants로 돌아가기" aria-label="SilentQuants로 돌아가기">←</a>
   <a href="#home" class="brand" style="text-decoration:none;color:inherit"><svg class="mark" viewBox="0 0 26 26" fill="none" aria-hidden="true">
       <path d="M13 3.2c-4.9 0-8.6 3.2-8.6 7.4 0 4.2 3.7 7.2 8.6 7.2 4.4 0 7.6-2.4 8.2-5.7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
       <path d="M16.6 21.4c3-.5 5.3-2.4 6.2-5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" opacity=".5"/>
@@ -953,7 +953,13 @@ pNoCode:"코드 미표기", pCopy:"복사", pCopied:"복사됨",
  }
 };
 
-let lang = localStorage.getItem("helix-lang") || "ko";
+/* 언어 우선순위: 주소의 ?lang= → 저장된 값 → 기본 ko.
+   SilentQuants에서 넘어올 때 그 사이트의 언어를 그대로 들고 온다. */
+const _LANGQ = new URLSearchParams(location.search).get("lang");
+let lang = (_LANGQ === "ko" || _LANGQ === "en")
+  ? _LANGQ
+  : (localStorage.getItem("helix-lang") || "ko");
+if (_LANGQ === "ko" || _LANGQ === "en") { try{ localStorage.setItem("helix-lang", lang); }catch(e){} }
 let theme = localStorage.getItem("helix-theme") || "dark";
 let urlReady=false,
     favOnly=false, favs=new Set(JSON.parse(localStorage.getItem("helix-favs")||"[]")),
@@ -2199,6 +2205,13 @@ function applyTheme(){
 }
 let pageSuffix="";
 function setTitle(sfx){ pageSuffix=sfx||""; document.title=sfx?("Helix — "+sfx):"Helix"; }
+/* 뒤로가기는 지금 화면 언어의 SilentQuants로 보낸다 */
+function syncBackHome(){
+  const a=document.getElementById("backHome"); if(!a) return;
+  a.href = lang==="ko" ? "https://silentquants.com/ko/" : "https://silentquants.com/";
+  a.title = lang==="ko" ? "SilentQuants 한국어판으로" : "Back to SilentQuants";
+  a.setAttribute("aria-label", a.title);
+}
 const Tset=(id,v)=>{const e=document.getElementById(id); if(e) e.textContent=v;};
 function fillMenuCounts(){
   const n=(v)=>Number(v||0).toLocaleString("en-US");
@@ -2211,6 +2224,7 @@ function fillMenuCounts(){
   set("tmPlan",""); set("tmSpreads",""); set("tmPayouts",""); set("tmTools","");
 }
 function applyStatics(){
+  try{ if(typeof syncBackHome==="function") syncBackHome(); }catch(e){}
   document.documentElement.lang=lang;
   document.querySelectorAll("[data-ko][data-en]").forEach(a=>{a.textContent=lang==="ko"?a.dataset.ko:a.dataset.en;});
   Tset("brandSub",t("brandSub"));{const _h=el("h1"),_s=el("sub"); if(_h)_h.textContent=t("h1"); if(_s)_s.textContent=t("sub");}
@@ -2286,6 +2300,7 @@ document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{
   /* 동적 화면은 다시 그려야 언어가 바뀐다 — 표 설정, 필터, 현재 페이지 전부 */
   applyStatics();
   if(lang==="en") ensureNotesEn(()=>{ if(activeId) openDrawer(activeId); });
+  if(typeof syncBackHome==="function") syncBackHome();
   if(typeof renderSiteFoot==="function") renderSiteFoot();
   if(typeof buildTableSettings==="function") buildTableSettings();
   if(typeof buildFilterSettings==="function") buildFilterSettings();

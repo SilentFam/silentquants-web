@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://silentquants.com/sitemap.xml
