@@ -149,7 +149,7 @@ const DB=window.HELIX_DB,rows=DB.rows,ASSET={ko:{cfd:"CFD",fut:"선물",futures:
         <span style="width:7px;height:7px;border-radius:99px;background:var(--green);display:inline-block"></span>
         ${lang==="ko"?"마지막 업데이트":"Last updated"} <b style="color:var(--ink2)">${esc(((DB.generated||"2026-11-14").match(/\d{4}-\d{2}-\d{2}/)||["2026-11-14"])[0])}</b> KST
       </div>
-      <p>${lang==="ko"?"상품 693개 · 브랜드 29개 · 자산군 5개. 참가비·낙폭·지급조건·규칙을 상품 단위로 기록하고, 근거 링크까지 함께 보관합니다.":"693 products · 29 brands · 5 assets. Fees, drawdown, payouts and rules recorded per product, with source links."}</p></div>
+      <p>${lang==="ko"?`상품 ${rows.length.toLocaleString("en-US")}개 · 브랜드 ${new Set(rows.map(a=>a.f)).size}개 · 자산군 ${new Set(rows.map(a=>a.mk)).size}개. 참가비·낙폭·지급조건·규칙을 상품 단위로 기록하고, 근거 링크까지 함께 보관합니다.`:`${rows.length.toLocaleString("en-US")} products · ${new Set(rows.map(a=>a.f)).size} brands · ${new Set(rows.map(a=>a.mk)).size} assets. Fees, drawdown, payouts and rules recorded per product, with the evidence link kept beside them.`}</p></div>
     <div class="stats">
       <a class="stat statlink" href="#challenges" data-clear="1"><div class="n">${rows.length.toLocaleString("en-US")}</div>
         <div class="l">${esc(t("rows"))} <span class="go">→</span></div></a>
