@@ -169,7 +169,6 @@
   .rtag.pfm{color:var(--ink2)}
   .rtag.tp{color:#00b67a;border-color:rgba(0,182,122,.4)}
   .rtag.sj{color:#00a0d2;border-color:rgba(0,160,210,.4)}
-  .rtag.feefo{color:#ff7a00;border-color:rgba(255,122,0,.4)}
   .tpwarn{display:inline-block;padding:1px 7px;border-radius:9999px;font-size:11px;font-weight:800;color:var(--red);
     border:1px solid rgba(255,45,85,.5);background:rgba(255,45,85,.10);text-decoration:none}
   .tpwarn:hover{background:rgba(255,45,85,.18)}
@@ -836,8 +835,8 @@
 </div></div>
 
 
-<script>window.HELIX_VER="f943a4f8";</script>
-<script src="data.js?v=f943a4f8"></script>
+<script>window.HELIX_VER="24130c9a";</script>
+<script src="data.js?v=24130c9a"></script>
 <script>
 const DB = window.HELIX_DB;
 const rows = DB.rows;
@@ -1469,7 +1468,7 @@ function matches(r){
   }
   if(F.ratingMin!=null){
     const x=ratingsOf(r.f);
-    const srcs=F.rtsrc.size?[...F.rtsrc]:["pfm","tp","sj","feefo"];
+    const srcs=F.rtsrc.size?[...F.rtsrc]:["pfm","tp","sj"];
     const vals=srcs.map(k=>(x[k]&&x[k].r!=null)?Number(x[k].r):null).filter(v=>v!=null);
     const best=vals.length?Math.max(...vals):(num(r.rt));
     if(best==null||best<F.ratingMin) return false;
@@ -1619,7 +1618,6 @@ function buildFilters(){
       <button data-rtsrc="pfm" class="${F.rtsrc.has("pfm")?"on":""}">PFM</button>
       <button data-rtsrc="tp" class="${F.rtsrc.has("tp")?"on":""}">Trustpilot</button>
       <button data-rtsrc="sj" class="${F.rtsrc.has("sj")?"on":""}">Sitejabber</button>
-      <button data-rtsrc="feefo" class="${F.rtsrc.has("feefo")?"on":""}" title="${lang==="ko"?"Feefo는 공식 리뷰 API로 수집합니다(웹 페이지는 차단). 현재 1개사.":"Collected through Feefo's review API (the site itself blocks bots). One firm so far."}">Feefo</button>
       <button disabled title="${lang==="ko"?"Reviews.io에 이 업체들의 프로필이 없습니다":"Reviews.io has no profiles for these firms"}">Reviews.io</button>
     </div>
     <div class="chips2">
@@ -2007,12 +2005,11 @@ function renderBar(){
 }
 
 /* ---------- drawer ---------- */
-const RSRC=[["pfm",{ko:"PFM",en:"PFM"}],["tp",{ko:"Trustpilot",en:"Trustpilot"}],["feefo",{ko:"Feefo",en:"Feefo"}]];
+const RSRC=[["pfm",{ko:"PFM",en:"PFM"}],["tp",{ko:"Trustpilot",en:"Trustpilot"}]];
 function ratingsOf(firm){ return (DB.ratings||{})[firm]||{}; }
 function ratingURLs(x){
   return {pfm: (x.pfm&&x.pfm.url)||"#",
           tp: (x.tp&&x.tp.d)?("https://www.trustpilot.com/review/"+x.tp.d):"#",
-          feefo: (x.feefo&&x.feefo.src)||"#",
           sj: (x.sj&&x.sj.src)?("https://www.sitejabber.com/reviews/"+x.sj.src):"#"};
 }
 function ratingCell(r){
@@ -2027,7 +2024,6 @@ function ratingCell(r){
     else if(x.tp.r!=null) out.push(a(U.tp,"tp",`T${x.tp.r}`,`Trustpilot ${x.tp.r}${x.tp.n?` · ${x.tp.n} reviews`:""} — ${lang==="ko"?"출처로 이동":"open source"}`));
   }
   if(x.sj&&x.sj.r!=null) out.push(a(U.sj,"sj",`SJ${x.sj.r}`,`Sitejabber ${x.sj.r}${x.sj.n!=null?` · ${x.sj.n} reviews`:""} — ${lang==="ko"?"출처로 이동":"open source"}`));
-  if(x.feefo&&x.feefo.r!=null) out.push(a(U.feefo,"feefo",`F${x.feefo.r}`,`Feefo ${x.feefo.r}${x.feefo.n?` · ${x.feefo.n} reviews`:""}${x.feefo.method==="sampled"?` (${x.feefo.sampled}건 표본 평균)`:""} — ${lang==="ko"?"출처로 이동":"open source"}`));
   if(!out.length) return '<span class="dim">—</span>';
   return `<span class="rtags">${out.join("")}</span>`;
 }
@@ -2157,7 +2153,6 @@ function openDrawer(id){
             else if(x.tp.r!=null) bits.push(lnk(U.tp,"tp",`Trustpilot ${x.tp.r}`,`Trustpilot ${x.tp.r}${x.tp.n?` · ${x.tp.n} reviews`:""}`)+(x.tp.n?` <span class="dim">(${x.tp.n})</span>`:""));
           }
           if(x.sj&&x.sj.r!=null) bits.push(lnk(U.sj,"sj",`Sitejabber ${x.sj.r}`,`Sitejabber ${x.sj.r}${x.sj.n!=null?` · ${x.sj.n} reviews`:""}`));
-          if(x.feefo&&x.feefo.r!=null) bits.push(lnk(U.feefo,"feefo",`Feefo ${x.feefo.r}`,`Feefo ${x.feefo.r}${x.feefo.n?` · ${x.feefo.n} reviews`:""}${x.feefo.method==="sampled"?` (${x.feefo.sampled}건 표본)`:""}`)+(x.feefo.n?` <span class="dim">(${x.feefo.n})</span>`:""));
           if(!bits.length && r.rt) bits.push(`${esc(r.rt)} ★ <span class="dim">(${esc(r.rn||"—")})</span>`);
         }
         if(x.tp){
@@ -2165,7 +2160,6 @@ function openDrawer(id){
           else if(x.tp.r!=null) bits.push(`<span class="rtag tp">Trustpilot ${x.tp.r}</span>${x.tp.n?` <span class="dim">(${x.tp.n})</span>`:""}`);
         }
         if(x.sj&&x.sj.r!=null) bits.push(`<span class="rtag sj">Sitejabber ${x.sj.r}</span>${x.sj.n!=null?` <span class="dim">(${x.sj.n})</span>`:""}`);
-        if(x.feefo&&x.feefo.r!=null) bits.push(`<a class="rtag feefo" href="${esc(x.feefo.src||"#")}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Feefo ${x.feefo.r}</a>${x.feefo.n?` <span class="dim">(${x.feefo.n}${x.feefo.method==="sampled"?` · ${x.feefo.sampled}건 표본`:""})</span>`:""}`);
         if(!bits.length && r.rt) bits.push(`${esc(r.rt)} ★ <span class="dim">(${esc(r.rn||"—")})</span>`);
         return bits.length?bits.join(" · "):'<span class="dim">—</span>';
       })())}
