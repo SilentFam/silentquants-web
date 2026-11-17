@@ -440,6 +440,15 @@
     .st{display:inline-block; justify-self:start}
   }
 
+  /* 접근성: 터치 타깃 44px · 모션 최소화 */
+  @media (max-width: 1024px){
+    header.site a, header.site button, nav.top a, .tools a, .tools button{min-height:44px;display:inline-flex;align-items:center}
+    .pillbar{padding-top:6px;padding-bottom:6px}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+  }
+
 
   h1{max-width:22ch; text-wrap:balance}
   .herobtns{display:flex; gap:12px; flex-wrap:wrap; margin-top:26px}
